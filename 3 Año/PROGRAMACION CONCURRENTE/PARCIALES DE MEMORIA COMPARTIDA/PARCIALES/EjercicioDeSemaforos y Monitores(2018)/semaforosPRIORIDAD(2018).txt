@@ -1,0 +1,38 @@
+En un parque de diversiones hay 15 autitos chocadores que son usados por A personas adultas y N personas menores. Cada persona repetidamente , usa un autito en turnos de 30 minutos. El parque tiene 2 reglas de seguridad: (1) no permiten que haya más de 10 menores al mismo tiempo usando autitos, (2) no permiten que haya más de 8 adultos al mismo tiempo usando autitos.Nota: maximizar la concurrencia
+-------------------------------------------------------------------------------------------------------
+COMO REALIZARLO?
+Como dice el enunciado tenemos 2 procesos donde en 1 tenemos A personas Adultas y otro N personas menores, donde las personas utilizan el auto durante 30 min Y tiene que cumplir con 2 reglas
+---------------------------------------------------------------------------------------------------------
+var // declaracion de variables
+sem S_TotMayores= 8 // variable inicializado en 8 de tipo semaforo para simular cantidad de personas mayores que pueden usar los autos
+sem S_TotMenores= 10  // variable inicializado en 10 de tipo semaforo para simular cantidad de personas menores que pueden usar los autos
+sem S_Total: 15 // variable inicializado en 15 de tipo semáforo para simular la cantidad total de autitos a utilizar
+---------------------------------------------------------------------------------------------------------
+process Adultas[i: 1..A]
+{
+     while(true)
+{
+    P(S_TotMayores); //decremento el semaforo de prioridad
+    P(S_Total);/decremento el semaforo del total
+   //usar el autito durante 30 min
+   delay(30)
+   V(S_Total)/aumento el semaforo total
+   V(S_Mayores);/aumento el semaforo de prioridad
+  }
+}
+---------------------------------------------------------------------------------------------------------
+process Menores[i:1..N]
+{
+  while(true)
+{
+    P(S_TotMenores); /decremento el semaforo de prioridad
+    P(S_Total);/decremento el semaforo de prioridad
+    //usar el autito durante 30 min
+    delay(30)
+    V(S_Total) /aumento el semaforo total
+    V(S_Menores);/aumento el semaforo de prioridad
+ }
+}
+---------------------------------------------------------------------------------------------------------
+Con el siguiente enunciado lo que queremos demostrar es la sincronización de  los procesos cumpliendo una prioridad pq sino contemplamos los semáforos de prioridad  el semáforo el cual contiene todos va quedar en 0.
+_________________________________________________________________________
