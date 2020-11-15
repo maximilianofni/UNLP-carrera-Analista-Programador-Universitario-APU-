@@ -1,0 +1,33 @@
+Resolver con PMS(pasaje de mensajes Sincronicos) el siguiente problema. Hay 15 usuarios que deben utilizar una impresora respetando el orden de llegada. El usuario debe esperar su turno, usa la impresora y luego avisa de que termino de usarla al adminsitrador para que se la asigne al siguiente usuario.
+________________________________________________________________________
+COMO RESOLVER?
+vamos a definir 3 procesos usuarios, impresora y administrador porque necesitamos para que valla sincronizando el uso y no usen dos usuarios al mismo tiempo.
+______________________________________________________________________
+queue cola
+
+process Usuario[id: 0..15]
+{
+//van llegando los usuarios
+Administrador!encolar(i)  //envio msj al administrador que se encolen los usuarios
+Administrador?Usar(id);   //recibo el msj del administrador para usar la impresora
+//Usar Impresora
+  Impresora!termino();  //le envio un msj a la impresora q termine de usar la impresora
+}
+--------------------------------------------------------------------------------------------------
+process Impresora()
+{
+while(true){
+    Administrador!impresoraLibre; // le manda el msj al administrador que esta libre
+    Usuario[*]?termino(); // recibo el msj del usuario que termino de usar la impresora
+}
+}
+______________________________________________________________________
+Process Administrador{
+var 
+     int usuario
+while(true){
+      if Usuario[*]?encolar(usuario) ->  // si hay usuario en el canal los encolo
+            cola.push(usuario);
+      [](not empty(cola))Impresora?libre()->  //si el canal no esta vacio y  la impresora esta libre
+          Usuario[cola.pop(usuario)]!usar(); //desencolo al usuario y le mando el mensaje usar
+  }

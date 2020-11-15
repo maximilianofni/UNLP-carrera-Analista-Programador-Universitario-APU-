@@ -1,0 +1,61 @@
+En una conferencia científica se juntan 20 investigadores .Cuando todos han llegado solicitan turno para exponer su trabajo. Cada investigador expondrá su trabajo durante 15 minutos cuando le llegue su turno .Cuando todos terminaron de exponer se pueden retirar
+________________________________________________________________________
+como resolver?
+en el siguiente ejercicio como vemos vamos a tener un proceso de 20 Investigadores.
+y vamos tener un MONITOR "Conferencia",
+el cual posee 4 procedimientos, "llegar", "salir", "exponer", "TerminoDeExponer"
+se tiene q respetar una barrera
+________________________________________________________________________
+
+Monitor Conferencia
+    cond investigadores; //variable condicion del monitor para ir sincronizando a los procesos
+    boolean libre : true; // variable booleana para comprobar si hay algun investigador exponiendo
+    cant : integer;// variable contador para incrementar/decrementar a los investigadores 
+    InvestigadorEsperando: integer;// variable contador para incrementar/decrementar a los investigadores esperando exponer
+_________________________________________________________________________
+
+procedure Llegar(int i)
+{ 
+ cant ++ // llegan los inv.. y los sumo
+if (cant  == 20) 
+  SIGNALALL(investigadores); // despierto a todos
+else
+ WAIT(investigadores) // duermo a los I que van llegando
+}
+-----------------------------------------------------------------------------------------------
+procedure Retirarse(int i)
+{
+if(cant < 20 )
+    cant ++ // incremento a los I
+    WAIT(investigadores) // los duermo
+else
+     SIGNALALL(investigadores) // una vez que son 20 los despierto a todos
+}
+---------------------------------------------------------------------------------------------
+procedure Exponer(int i)
+{
+if(not libre)// si hay un I exponiendo
+   investigadorEsperando ++;// incremento el contador
+   wait(investigador); // duermo a los quieren exponer y no pueden
+else 
+  libre:= false; 
+}
+--------------------------------------------------------------------------------------------------
+procedure TerminoExponer(int i)
+{
+if (investigadorEspeando > 0) // si hay inv por exponer
+   investigadorEsperando --;  // decremento
+   SIGNAL(investigador); // despierto al proceso
+else 
+    libre:= true;
+}
+_________________________________________________________
+
+process investigadores[i:1..20]
+{
+  Conferencia.llegar(i)
+   Conferencia.exponer(i)
+   delay(15*60);
+ Conferencia.TerminoExponer(i)
+ Conferencia.Retirarse(i)
+}
