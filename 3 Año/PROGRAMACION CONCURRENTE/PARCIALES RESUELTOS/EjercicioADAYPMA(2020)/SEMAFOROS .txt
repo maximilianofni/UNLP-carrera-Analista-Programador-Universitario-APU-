@@ -1,0 +1,40 @@
+Resolver con SEMÁFOROS la siguiente situación. En una parcial hay 25
+Ayudantes que deben contar la cantidad total de parciales aprobados. Para esto
+cada Ayudante debe corregir 20 exámenes (suponga que ya los tiene en su
+poder) y determinar la nota (Aprobado o Desaprobado). Además hay un
+Profesor Titular que en base a la cantidad total de parciales aprobados debe
+calcular el porcentaje de aprobación. Nota: suponga que existe una función
+nota = Corregir(examen) que es llamada por los ayudantes para corregir un examen,
+y retorna la nota del mismo (A o D). Maximizar la concurrencia.
+------------------------------------------------------------------------------------------------------
+COMO RESOLVER? COMO DICE EL ENUNCIADO TENEMOS 2 PROCESOS (AYUDANTE Y TITULAR)
+
+----------------------------------------------------------------------------------------------------
+//Variable compartidas
+sem mutex = 1;
+sem listo = 0;
+int totalAprobados = 0;
+----------------------------------------------------------------------------------------------------
+Process Usuario[id: 0..C-1] {
+int i, cantAprobados;
+text examenes[20];
+char notas[20];
+for (i=0; i<20: i++) {
+notas[i] = corregir(exámenes[i]);
+if (notas[i] == ‘A’) cantAprobados++;
+};
+P(mutex);
+totalAprobados = totalAprobados + cantAprobados;
+V(mutex);
+V(listo);
+};
+
+-------------------------------------------------------------------------------------------
+Process Titular
+{
+int i;
+float resultado;
+for (i=0; i<25; i++) 
+P(listo);
+resultado = (totalAprobados * 100)/500;
+};

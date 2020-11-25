@@ -1,0 +1,73 @@
+Resolver con ADA la siguiente situación. Simular la atención en un corralón de
+materiales donde hay 4 empleados para atender a N clientes de acuerdo al orden
+de llegada. Cuando el cliente llega espera a que cualquiera de los empleados lo
+atienda, y al terminar se retira. Nota: maximizar la concurrencia; suponga que
+existe una función Atender() llamada por el empleado que simula la atención.
+--------------------------------------------------------------------------------------------------------
+COMO RESOLVER? 
+COMO DICE EL ENUNCIADO TENEMOS UN PROCESO EMPEADO Y OTRO CLIENTE.
+---------------------------------------------------------------------------------------------------------
+Procedure ParcialADAis
+//DEFINICION DE TASK Y ENTRYS
+task type Cliente is
+entry Identificación (ident: IN integer);
+entry Inicio (datos: OUT text);
+entry Respuesta (res: IN text);
+end Cliente;
+---------------------------------------------------------------------------------------------------------
+task type Empleado;
+task Admin is
+entry Solicitar (id: IN integer);
+entry Siguiente (id: OUT integer);
+end Admin;
+---------------------------------------------------------------------------------------------------------
+//DEFINICION DE  VARIABLES
+arrClientes: array (0..N-1) of Cliente;
+arrEmpleados: array (0..3) of Empleado;
+----------------------------------------------------------------------------------------------------------
+//CUERPO DE LA TAREA
+task body Cliente is
+id: integer;
+resultado: text;
+begin
+acceptIdentificación (ident: IN integer) do
+id := ident;
+end Identificación;
+Admin.Solicitar (id);
+acceptInicio (datos: OUT text) do
+datos := Listado de compras
+end Inicio;
+acceptRespuesta (res: IN text) do
+resultado := res;
+end Respuesta;
+end Cliente;
+---------------------------------------------------------------------------------------------------------
+task body Admin is
+idC: integer;
+begin
+loop
+accept Solicitar (id: IN integer) do
+idC := id;
+end Solicitar;
+accept Siguiente (id: OUT integer) do
+id := idC;
+end Siguiente;
+end loop;
+end Admin;
+-------------------------------------------------------------------------------------------------------
+task body Empleado is
+idC: integer;
+resultado, listado: text;
+begin
+loop
+AdminSiguiente (idC);
+arrClientes(idC).Inicio (listado);
+resultado := Atender(listado);
+arrClientes(idC).Respuesta (resultado);
+end loop;
+end Empleado;
+Begin
+for i in 1..N loop
+arrClientes(i).Identificación(i);
+end loop;
+End ParcialADA;

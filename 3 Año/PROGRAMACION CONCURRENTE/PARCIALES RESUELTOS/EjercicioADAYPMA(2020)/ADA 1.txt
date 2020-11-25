@@ -1,0 +1,70 @@
+Resolver con ADA la siguiente situación. En una oficina hay un empleado y P personas
+que van para ser atendidas para realizar un trámite. Cuando una persona llega espera a lo
+sumo 20 minutos a que comience a atenderla el empleado para resolver el trámite que va
+a hacer, y luego se va; si pasó el tiempo se retira sin realizar el trámite. El empleado
+atienden las solicitudes en orden de llegada. Cuando las P personas se han retirado el
+empelado también se retira. Nota: cada persona hace sólo un pedido y termina; suponga
+que existe una función Atender() llamada por el empleado que simula que el empleado
+está resolviendo el trámite del cliente; todas las tareas deben terminar
+_______________________________________________________________________
+COMO RESOLVER?
+para el ejercicio definimos 2 tasks( persona , empleado y un administrador para sincronizar todo)
+el task empleado va tener 2 entry(resolver y terminar)
+
+-------------------------------------------------------------------------------------------------------
+Procedure ParcialADA is
+//definicion de task y entry
+task type Persona;
+
+task Empleado is
+     entry Resolver (tramite: IN text; respuesta: OUT text);
+    entry Terminar;
+end Empleado;
+task Admin is
+    entry MeVoy;
+end Admin;
+
+--------------------------------------------------------------------------------------------------------
+//definicion de variables
+arrPersonas: array (0..P-1) of Persona;
+--------------------------------------------------------------------------------------------------------
+//cuerpo de los tasks
+task body Empleado is
+fin: boolean := false;
+begin
+while (not fin) loop
+select
+accept Resolver(tramite: IN text; respuesta: OUT text) do
+respuesta := Atender(tramite);
+end Resolver;
+or
+accept Terminar;
+fin := true;
+end select;
+end loop;
+end Empleado;
+------------------------------------------------------------------------------------
+task body Persona is
+Resultado: text;
+Tramite: text :=" " ;
+begin
+Select
+Empleado.Resolver (Tramite, Resultado);
+or delay (1200)
+null;
+end loop;
+Admin.MeVoy;
+end Persona;
+-----------------------------------------------------------------------------------------
+task body Admin is
+begin
+for i in 1..P loop
+accept MeVoy;
+end loop;
+Empleado.Terminar;
+end Admin;
+
+--------------------------------------------------------------------------------------------
+Begin
+null;
+End ParcialADA

@@ -1,0 +1,6 @@
+Resolver con PMS (Pasaje de Mensajes SINCRÓNICOS) el siguiente problema.
+Hay un teléfono público que debe ser usado por U usuarios de acuerdo al orden de
+llegada (se debe usar con exclusión mutua). El usuario debe esperar su turno, usa el
+teléfono y luego lo deja para que el siguiente lo use. Nota: cada usuario usa sólo una
+vez el teléfono.
+----------------------------------------------------------------------------------------------------
