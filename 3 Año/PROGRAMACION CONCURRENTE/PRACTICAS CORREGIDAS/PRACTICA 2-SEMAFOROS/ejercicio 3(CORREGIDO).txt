@@ -1,0 +1,18 @@
+3) El error con la solucion es que si se pregunta primero por la cantidad total de usuarios,
+es posible que se produzca más demora de la necesaria. Por ejemplo, un usuario de prioridad alta puede
+estar ocupando los usuarios totales mientras espera que se vaya uno de prioridad alta cuando en ese
+tiempo de demora innecesaria quizá podría haber entrado a la  BD un usuario de prioridad baja.
+Por eso conviene asegurarse que podría entrar ni bien tenga espacio libre, y eso se logra preguntando primero
+por la prioridad.
+
+Resolución del problema:
+
+    Donde está escrito:
+      P(sem); //preguntar usuarios totales en BD
+      P(alta); //preguntar prioridad del usuario
+
+    Se reemplaza cada línea por (respectivamente):
+      P(alta);
+      P(sem);
+
+Se hace lo mismo con el usuario de prioridad baja.

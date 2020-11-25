@@ -1,0 +1,161 @@
+# ADA
+
+No se puede usar variables compartidas.
+
+## Declaración
+	-Especificación de tareas sin ENTRY’s (nadie le puede hacer llamados).
+		TASK Nombre;
+		TASK TYPE Nombre; // varios
+
+	-Especificación de tareas con ENTRY’s (le puede hacer llamados). Los entry’s funcionan de manera semejante a los procedimientos: solo pueden recibir o 	enviar información por medio de los parámetros del entry. NO RETORNAN VALORES COMO LAS FUNCIONES
+		TASK [TYPE] Nombre IS
+		ENTRY e1;
+		ENTRY e2 (p1: IN integer; p2: OUT char; p3: IN OUT float);
+		END Nombre;
+
+	- Cuerpo de las tareas.
+		TASK BODY Nombre IS
+			Codigo que realiza la Tarea;
+		END Nombre;
+
+## Sincronización y comunicación entre tareas
+	• Entry call para enviar información (o avisar algún evento).
+	
+	 	NombreTarea.NombreEntry (parametros);
+
+	• Accept para atender un pedido de entry call sin cuerpo (sólo para recibir el
+	aviso de un evento para sincronización).
+
+	 ACCEPT NombreEntry (p1: IN integer; p3: IN OUT float);
+	
+	• Accept para atender un pedido de entry call con cuerpo.
+	
+	 ACCEPT NombreEntry (p1: IN integer; p3: IN OUT float) do
+		Cuerpo del accept donde se puede acceder a los parámetros p1 y p3.
+		Fuera del entry estos parámetros no se pueden usar.
+	 END NombreEntry;
+
+	• El accept se puede hacer en el cuerpo de la tarea que ha declarado el entry en
+	su especificación. Los entry call se pueden hacer en cualquier tarea o en el
+	programa principal.
+
+	• Tanto el entry call como el accept son bloqueantes, ambas tareas continúan
+	trabajando cuando el cuerp odel accept ha terminado su ejecución.
+
+## Select
+
+	- Select Or: distintas alternativas para ACEPT
+		Ahora existen dos tipos de Clientes:
+			Los que solicitan el estado del trámite.
+			Los que inician un trámite, a estos el empleado les retorna el numero 	de trámite.
+		Los clientes que solicitan el estado del trámite deben tener prioridad.
+
+		Task Empleado Is
+			Entry estadoTramite(DNI:IN Tdni,var estado: OUT Testado)
+		Task Body Empleado Is
+		  While true LOOP
+			SELECT		
+				ACCEPT estadoTramite(DNI:IN Tdni,var estado: OUT Testado) DO
+					estado = “buscar tramite BD”
+				End estadoTramite; 
+			OR
+			  WHEN	estadoTramite’count =0 => 
+				ACCEPT estadoInicio(DNI:IN Tdni,var nro: OUT Ttramite) DO
+					nro = “iniciar tramite”
+				End estadoTramite; 
+			END SELECT	
+		  End LOOP
+		End Empleado
+
+	- Select Or delay: Pasa x tiempo
+		Idem Ejemplo 2 pero el empleado si no hay requerimientos durante 5 minutos ordena el escritorio.
+
+		Task Empleado Is
+			Entry estadoTramite(DNI:IN Tdni,var estado: OUT Testado)
+		Task Body Empleado Is
+		  While true LOOP
+			SELECT		
+				ACCEPT estadoTramite(DNI:IN Tdni,var estado: OUT Testado) DO
+					estado = “buscar tramite BD”
+				End estadoTramite; 
+			OR
+			  WHEN	estadoTramite’count = 0 => 
+				ACCEPT estadoInicio(DNI:IN Tdni,var nro: OUT Ttramite) DO
+					nro = “iniciar tramite”
+				End estadoTramite; 
+			OR DELAY(5)
+				“Ordena el escritorio”
+			END SELECT	
+		  End LOOP
+		End Empleado
+
+	- Select Else: Hacer algo de inmediato
+		Idem Ejemplo 2 pero el empleado si no hay requerimientos inmediatamente  ordena el escritorio.
+
+		Task Empleado Is
+			Entry estadoTramite(DNI:IN Tdni,var estado: OUT Testado)
+		Task Body Empleado Is
+		  While true LOOP
+			SELECT		
+				ACCEPT estadoTramite(DNI:IN Tdni,var estado: OUT Testado) DO
+					estado = “buscar tramite BD”
+				End estadoTramite; 
+			OR
+			  WHEN	estadoTramite’count = 0 => 
+				ACCEPT estadoInicio(DNI:IN Tdni,var nro: OUT Ttramite) DO
+					nro = “iniciar tramite”
+				End estadoTramite; 
+			ELSE
+				“Ordena el escritorio”
+			END SELECT	
+		  End LOOP
+		End Empleado
+
+	- Mas
+		dem Ejemplo 1 pero el cliente si no es atendido en menos de 5 minutos se va.
+
+		Task Cliente Is
+		DNI:Tdni;
+		Estado:Testado;
+			SELECT
+				Empleado.estadoTramite(DNI,estado);
+			OR 
+			  DELAY(5) 
+			END SELECT
+		End Cliente
+
+	## No permitido
+
+		Mezclar ACCEPT y ENTRY CALLs en SELECT..OR 
+
+		Task Body Proceso Is
+			SELECT		
+				ACCEPT unEntry(parametros) DO
+					…			
+				End estadoTramite; 
+			OR
+				otroTask.unCall();	  
+			END SELECT	
+		End Proces
+
+		Si select else
+
+		Task Body Proceso Is
+			SELECT		
+				ACCEPT unEntry(parametros) DO
+					…			
+				End estadoTramite; 
+			ELSE
+				otroTask.unCall();	  
+			END SELECT	
+		End Proceso
+
+		No Mas de un ENTRY CALLs en SELECT..OR 
+
+		Task Body Proceso Is
+			SELECT		
+				otroTask.unCall();
+			OR
+				otroTask.otroCall();	  
+			END SELECT	
+		End Proceso

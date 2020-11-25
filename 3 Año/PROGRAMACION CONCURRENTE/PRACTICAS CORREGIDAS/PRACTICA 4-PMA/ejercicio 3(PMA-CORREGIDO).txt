@@ -1,0 +1,40 @@
+3)Se debe modelar la descarga de cereales en una acopiadora. Para esto existen N camiones
+que deben descargar su carga. Los camiones se descargan de a uno por vez, y de acuerdo al
+orden de llegada
+------------------------------------------------------------------------------------------
+
+chan aviso_llegada (int);
+
+chan pasar [N] ();
+
+chan aviso_salida [N] ();
+
+Process Camión [i:1..N] {
+
+String aviso;
+
+send aviso_llegada (i);
+
+receive pasar [i] (aviso);
+
+descarga()
+
+send aviso_salida [i] ();
+
+}
+
+Process Coordinador {
+
+int idC;
+
+while (true) {
+
+receive aviso_llegada (idC);
+
+send pasar [idC] ();
+
+receive aviso_salida [idC] ();
+
+}
+
+}

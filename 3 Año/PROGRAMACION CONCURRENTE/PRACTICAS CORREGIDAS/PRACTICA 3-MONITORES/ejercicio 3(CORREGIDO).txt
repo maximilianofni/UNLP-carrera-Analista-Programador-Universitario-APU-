@@ -1,0 +1,37 @@
+En un laboratorio de genética se debe administrar el uso de una máquina secuenciadora de
+ADN. Esta máquina se puede utilizar por una única persona a la vez. Existen 100 personas
+en el laboratorio que utilizan repetidamente esta máquina para sus estudios, para esto cada
+persona pide permiso para usarla, y cuando termina el análisis avisa que termino. Cuando la
+máquina está libre se le debe adjudicar a aquella persona cuyo pedido tiene mayor prioridad
+(valor numérico entre 0 y 100).
+
+Monitor SecuenciadoraADN
+    queue colaPrioridades  // variable cola para ir encolando y desencolando los estudios
+    boolean libre= true   // variable booleana para ver si esta libre o no la maquina
+    cond [1..100] prioridad  // variable de tipo array de tipo condicion
+      
+procedure enUso(int adn)
+{
+  if(libre)  // si esta libre la maquina
+    libre= false  // lo seteo el falso
+  else 
+     colaprioridades.push(adn)  // encolo un adn
+     wait(prioridad[adn])       // duermo al monitor
+}
+
+procedure fin (int adn)
+{
+ if(colaPrioridades.tieneElementos())  // si hay estudios por procesar
+     colaPrioridades.pop(adn)
+     signal(pririodad[adn])  // despierto al monitor
+else 
+    libre= true  // vuelvo a setear la maquina como libre
+}
+
+process personas[id: 1 .. 100]
+{
+  while(true){
+  SecuenciadoraADN.enUso(adn)
+  SecuenciadoraADN.fin(adn)
+  }
+}

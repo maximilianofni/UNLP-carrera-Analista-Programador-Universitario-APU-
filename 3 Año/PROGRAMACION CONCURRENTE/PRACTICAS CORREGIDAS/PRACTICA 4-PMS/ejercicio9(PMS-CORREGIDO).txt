@@ -1,0 +1,35 @@
+En una estación de comunicaciones se cuenta con 10 radares y una unidad de
+procesamiento que se encarga de procesar la información enviada por los radares. Cada
+radar repetidamente detecta señales de radio durante 15 segundos y le envía esos datos a la
+unidad de procesamiento para que los analice. Los radares no deben esperar a ser atendidos
+para continuar trabajando.
+
+PROCESS RADAR[i=1 to 10]{
+var 
+      señal : string
+  while (true){
+    delay(0.15); //detecta señales
+    captador! envioseñal("señal");
+  }
+}
+
+PROCESS CAPTADOR {
+var 
+    cola, señal : string
+  while (true){
+    if true; radar[*] ? señal -> señales.push(señal);
+        cola.push(señal)
+    [] (!empty(cola); procesador ?haySeñal -> 
+        "señal" = cola.pop();
+        procesador!hayseñal("señal");
+  }
+
+PROCESS PROCESADOR {
+var 
+   señal : string
+  while (true){
+    captador!haySeñal;
+    captador?envioseñal("señal");
+    delay(); //procesa la señal
+  }
+}

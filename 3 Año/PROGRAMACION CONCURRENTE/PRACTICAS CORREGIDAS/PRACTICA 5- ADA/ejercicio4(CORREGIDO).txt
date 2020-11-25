@@ -1,0 +1,105 @@
+4) Se dispone de un sistema compuesto por 1 central y 2 procesos. Los procesos envían
+señales a la central. La central comienza su ejecución tomando una señal del proceso 1,
+luego toma aleatoriamente señales de cualquiera de los dos indefinidamente. Al recibir una
+señal de proceso 2, recibe señales del mismo proceso durante 3 minutos.
+El proceso 1 envía una señal que es considerada vieja (se deshecha) si en 2 minutos no fue
+recibida.
+El proceso 2 envía una señal, si no es recibida en ese instante espera 1 minuto y vuelve a
+mandarla (no se deshecha).
+
+
+procedure ej4 is
+ 
+//definicion de task
+task Proceso1;
+task Proceso2;
+task Timer;
+ 
+task Central is
+    entry recibir_p1(s : in Signal);
+    entry recibir_p2(s : in Signal);
+    entry timeout;
+end Central;
+
+//declaracion de variables
+C : Central
+T : timer
+p1: proceso1
+p2: proceso2
+
+task body Proceso1 is
+    s : Signal;
+begin
+    loop
+        -- este proceso siempre genera señales nuevas sin importar si pudo mandar o no la anterior
+       s := generarSignal();
+       select
+          C.recibir_p1(s);
+       or
+         delay(120.0)
+            null; 
+       end select;
+    end loop;
+end Proceso1;
+ 
+task body Proceso2 is
+    s : Signal;
+begin
+    s := generarSignal(); --genera la primera señal
+    loop
+       select
+          C.recibir_p2(s);
+          --ya sabemos que esa señal fue enviada entonces podemos genera una señal nueva
+          s := generarSignal();
+       else
+		 delay(60.0); 
+       end select;
+    end loop;
+end Proceso2;
+
+
+task body Central is
+    recibirSoloDeP2 : boolean;
+    s_actual : Signal;
+begin
+    recibirSoloDeP2 := false;
+    --primero recibe una señal de p1
+    accept recibir_p1(s : in Signal) do
+        s_actual := s;
+    end recibir_p1;
+    --hace algo con la señal
+    loop
+       select
+           WHEN recibirSoloDeP2=false => accept recibir_p1(s : in Signal) do
+                s_actual := s;
+            end recibir_p1;
+            --hace algo con la señal
+       or
+          WHEN timeout'count = 0 => accept recibir_p2(s: in Signal) do
+             s_actual := s;
+          end recibir_p2;
+		if (recibirSoloDeP2=false) then recibirSoloDeP2:=true;
+				T.comenzar; END IF;
+          --hace algo con la señal
+	   OR ACCEPT timeout;
+		recibirSoloDeP2 := false;
+       end select;
+    end loop;
+end Central;
+
+task Timer is
+    entry comenzar;
+end Timer;
+ 
+task body Timer is
+begin
+    loop
+       accept comenzar;
+       delay(180);
+       C.timeout;
+    end loop;
+end Timer;
+ 
+begin
+    null;
+end ej4;

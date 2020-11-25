@@ -1,0 +1,81 @@
+1. Se dispone de un puente por el cual puede pasar un solo auto a la vez. Un auto pide permiso
+para pasar por el puente, cruza por el mismo y luego sigue su camino.
+
+Monitor Puente
+ cond cola;
+ int cant= 0;
+ Procedure entrarPuente (int au)
+ while ( cant > 0) 
+ wait (cola);
+ cant = cant + 1;
+ end;
+ Procedure salirPuente (int au)
+ cant = cant – 1;
+ signal(cola);
+ end;
+End Monitor;
+
+
+a. ¿El código funciona correctamente? Justifique su respuesta.
+EL CODIGO FUNCIONA. El problema en este codigo es que tras despertar a un proceso de la cola, no se garantiza que este tome el procesador inmediatamente, dado que un nuevo proceso que aun no fue encolado puede ganarle el lugar, y estaran compitiendo 
+por obtener el monitor cuando en la vida real deberia pasar el auto que este primero en la cola
+Por lo si ignoramos lo anterior el codigo funciona, dado que el while permite volver a evaluar si el puente fue ocupado 
+por otro auto.
+
+b. ¿Se podría simplificar el programa? En caso afirmativo, rescriba el código.
+SI , SE PODRIA SIMPLIFICAR, REALIZANDO EXCLUSION MUTUA(GARANTIZANDO EL ACCESO AL PUENTE DE A UNO A LA VEZ). HACIENDO UN UNICO PROCEDURE. COMO EL SIGUIENTE EJEMPLO.
+
+Monitor puente
+{
+procedure cruzarPuente(int auto)
+{
+  delay(2)
+}
+process auto[id: 1 .. A]
+{
+  puente.cruzarPuente(auto)
+}
+}
+
+c. ¿La solución original respeta el orden de llegada de los vehículos?
+LA SOLUCION ORIGINAL NO RESPETA EL ORDEN. PORQUE PUEDE HABER PROCESOS QUERIENDO SALIR DEL PUENTE , QUERIENDO ENTRAR AL PUENTE Y HACIEENDO EL SIGNAL AL PROCESO QUE DESPERTAMOS SE ENCOLA SIN ORDEN.
+
+Tampoco la solución que se propone en el inciso b).
+NO PORQUE AL DESPERTAR UN PROCESO, ESTE COMPITE CON LOS RECIEN LLEGADOS POR ACCEDER AL MONITOR Y PODRIA NO ACCEDER AL FINAL.
+
+Una solución que tiene en cuenta el orden puede ser el siguiente:
+
+Monitor Puente
+	boolean libre = true;//Esto lo libero solo cuando no haya coches esperando. Me aseguro que no entrará ningún auto que llegase después de que el proceso en espera se durmió.
+	cond turno[1..M]; 
+	Cola espera;
+	
+	Procedure entrarPuente (auto: integer)
+		if (libre) 
+		  libre = false;
+		else {
+			espera.push(auto);
+			wait(turno[auto]);
+		}
+	end;
+
+	Procedure salirPuente (auto: integer)
+		int sig;
+		if (espera.isEmpty())
+			libre = true;
+		else {
+			sig = espera.pop();
+			signal(turno[sig]);
+		}
+	End;
+
+Auto [I:1..M]
+	Puente. entrarPuente (i);
+	“el auto cruza el puente”
+	Puente. salirPuente(i);
+ 
+ 
+
+
+
+

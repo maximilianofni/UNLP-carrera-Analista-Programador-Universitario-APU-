@@ -1,0 +1,308 @@
+1. Supongamos que tenemos una abuela que tiene dos tipos de lápices para dibujar: 10 de
+colores y 15 negros. Además tenemos tres clases de niños que quieren dibujar con los
+lápices: los que quieren usar sólo los lápices de colores (tipo C), los que usan sólo los
+lápices negros (tipo N), y los niños que usan cualquier tipo de lápiz (tipo A).
+a) Implemente un código para cada clase de niño de manera que ejecute pedido de
+lápiz, lo use por 10 minutos y luego lo devuelva. Además, debe modelarse el
+proceso abuela encargada de asignar los lápices.
+NOTA: se deben modelar los procesos niño y el proceso abuela.
+
+//DEFINICION DE CANALES
+nota: *Voy necesitar 3 canales para pedir lapiz al proceso abuela; 
+      *Voy necesitar 3 canales para la recepcion del lapiz del niño;
+      *Voy necesitar 2 canales mas para devolver
+      *Voy necesitar 4 procesos, uno para cada niño que elija el lapiz y el proceso abuela que es la adminsitra los lapices.  
+      
+chan pedidoLapicesCOLOR(int idLapiz);
+chan pedidoLapicesNEGRO(int idLapiz);
+chan pedidoLapizCualquiera(int idLapiz);
+chan recepcionLapizCOLOR[i:1..N];
+chan recepcionLapizNEGRO[i:1..N];
+chan recepcionLapizCualquiera[i:1..N];
+chan devolverLapizColor();
+chan devolverLapizNegro();
+
+Process Abuela{
+  //Ella es la encargada de administrar el uso de los lápices.
+  int lapizcolor = 10
+  int lapiznegro = 15
+  ind idNiño,i
+  while true{
+    if (not empty(pedidoLapicesColor) and (lapizcolor > 0) ->  //si no esta vacio el canal de lapices de color y hay lapiz color
+    {
+      receive pedidoLapicesColor(idNiño);  // recibo
+      //asignar lapiz
+      send recepcionLapizCOLOR[idNiño];   // envio
+      lapizcolor --
+    }
+    [] not empty(pedidoLapicesColor) and (lapiznegro > 0) ->   //si no esta vacio el canal de lapices en Negro y hay lapiz negro
+    {
+      receive pedidoLapicesNEGRO(idNiño);        // recibo
+      //asignar lapiz
+      send recepcionLapizNEGRO[idNiño];          // envio
+      lapiznegro --
+    }
+    [] not empty(pedirLapizCualquiera) and (lapiznegro > 0) ->//si no esta vacio el canal de lapices cualquiera y hay lapiz negro
+    {
+      //asignar lapiz
+        receive pedidoLapizNEGRO(idNiño);           //recibo
+        send recepcionLapizNEGRO[idNiño]('NEGRO');   // envio
+        lapiznegro --
+    }
+    []not empty(pedidoLapizCualquiera) and (lapizcolor > 0) -> //si no esta vacio el canal de lapices cualquiera y hay lapiz color
+        //asignar lapiz
+        receive pedidoLapizCOLOR(idNiño);           //recibo
+        send recepcionLapizCOLOR[idNiño]('COLOR');  //envio
+        lapizcolor --
+      }
+    []not empty(devolverLapizColor) ->   //si no esta vacio el canal de devolver lapices color
+        //devolver lapiz
+        receive devolverLapizColor()
+        lapizcolor ++
+    }
+    []not empty(devolverLapizNegro)->   //si no esta vacio el canal de devolver lapices negro
+        //asignar lapiz
+        receive devolverLapizNergro()
+        lapiznegro ++
+  }
+}
+
+
+
+
+Process NiñoTipoColor[id = 1..N]{
+  int idLapiz;                                          //Necesito poder manipular esta variable internamente.
+  while true{
+    send pedidoLapizColor(id);                  //envio lapiz
+    receive recepcionLapizColor[id](idLapiz);    //recibo lapiz
+    delay(10);                                  //usa el lapiz antes de devolverlo.
+    send devolverLapizColor[idLapiz]();        //envio 
+  }
+}
+
+Process NiñoTipoNegro [i = 1..N]{
+  int idLapiz;
+  while true{
+    send pedidoLapizNegro(id);      //envio lapiz
+    receive recepcionLapizNegro[id](idLapiz);  //recibo lapiz
+    delay(10);                              //usa el lapiz antes de devolverlo.
+    send devolverLapizNegro[idLapiz]();     //envio 
+  }
+}
+
+Process NiñoTipoCualquiera [i = 1..N]{
+  int idLapiz;
+  char tipoLapiz{N,C}
+  while true{
+    send pedidoLapizCualquiera(id);                               //envio
+    receive recepcionLapizCualquiera[id](idLapiz, tipoLapiz);  // recibo     
+    delay(10);  //usar lapiz 
+    if (tipoLapiz == 'N') then{      //si el lapiz es negro
+      send devolverLapizNegro[idLapiz]();   //envio
+    }else{
+      send devolverLapizColor[idLapiz]();    //envio
+    }
+  }
+}
+
+__________________________________________________________________________________________________________________________________
+b) Modificar el ejercicio para que a los niños de tipo A se les puede asignar un lápiz
+sólo cuando: hay lápiz negro disponible y ningún pedido pendiente de tipo N, o si
+hay lápiz de color disponible y ningún pedido pendiente de tipo C.
+PARA LA SOLUCION:
+Se deben modificar algunas condiciones en los IF del proceso Abuela despues es lo mismo
+__________________________________________________________________________________________________________________________________
+
+
+//DEFINICION DE CANALES
+nota: *Voy necesitar 3 canales para pedir lapiz al proceso abuela; 
+      *Voy necesitar 3 canales para la recepcion del lapiz del niño;
+      *Voy necesitar 2 canales mas para devolver
+      *Voy necesitar 4 procesos, uno para cada niño que elija el lapiz y el proceso abuela que es la adminsitra los lapices.  
+      
+chan pedidoLapicesCOLOR(int idLapiz);
+chan pedidoLapicesNEGRO(int idLapiz);
+chan pedidoLapizCualquiera(int idLapiz);
+chan recepcionLapizCOLOR[i:1..N];
+chan recepcionLapizNEGRO[i:1..N];
+chan recepcionLapizCualquiera[i:1..N];
+chan devolverLapizColor();
+chan devolverLapizNegro();
+
+Process Abuela{
+  //Ella es la encargada de administrar el uso de los lápices.
+  int lapizcolor = 10
+  int lapiznegro = 15
+  ind idNiño,i
+  while true{
+    if (not empty(pedidoLapicesColor) and (lapizcolor > 0) ->  //si no esta vacio el canal de lapices de color y hay lapiz color
+    {
+      receive pedidoLapicesColor(idNiño);  // recibo
+      //asignar lapiz
+      send recepcionLapizCOLOR[idNiño];   // envio
+      lapizcolor --
+    }
+    [] not empty(pedidoLapicesColor) and (lapiznegro > 0) ->   //si no esta vacio el canal de lapices en Negro y hay lapiz negro
+    {
+      receive pedidoLapicesNEGRO(idNiño);        // recibo
+      //asignar lapiz
+      send recepcionLapizNEGRO[idNiño];          // envio
+      lapiznegro --
+    }
+    //si no esta vacio el canal de lapices cualquiera y hay lapiz negro y no esta vacio el canal de pedido de lapiz negro
+    [] not empty(pedirLapizCualquiera) and (lapiznegro > 0) and not empty(pedidoLapizNegro) ->
+    {
+      //asignar lapiz
+        receive pedidoLapizNEGRO(idNiño);           //recibo
+        send recepcionLapizNEGRO[idNiño]('NEGRO');   // envio
+        lapiznegro --
+    }
+    //si no esta vacio el canal de lapices cualquiera y hay lapiz color y no esta vacio el canal de pedido de lapiz color
+    []not empty(pedidoLapizCualquiera) and (lapizcolor > 0) not empty(pedidoLapizColor)  -> 
+        //asignar lapiz
+        receive pedidoLapizCOLOR(idNiño);           //recibo
+        send recepcionLapizCOLOR[idNiño]('COLOR');  //envio
+        lapizcolor --
+      }
+    []not empty(devolverLapizColor) ->   //si no esta vacio el canal de devolver lapices color
+        //devolver lapiz
+        receive devolverLapizColor()
+        lapizcolor ++
+    }
+    []not empty(devolverLapizNegro)->   //si no esta vacio el canal de devolver lapices negro
+        //asignar lapiz
+        receive devolverLapizNergro()
+        lapiznegro ++
+  }
+}
+
+
+
+
+Process NiñoTipoColor[id = 1..N]{
+  int idLapiz;                                          //Necesito poder manipular esta variable internamente.
+  while true{
+    send pedidoLapizColor(id);                  //envio lapiz
+    receive recepcionLapizColor[id](idLapiz);    //recibo lapiz
+    delay(10);                                  //usa el lapiz antes de devolverlo.
+    send devolverLapizColor[idLapiz]();        //envio 
+  }
+}
+
+Process NiñoTipoNegro [i = 1..N]{
+  int idLapiz;
+  while true{
+    send pedidoLapizNegro(id);      //envio lapiz
+    receive recepcionLapizNegro[id](idLapiz);  //recibo lapiz
+    delay(10);                              //usa el lapiz antes de devolverlo.
+    send devolverLapizNegro[idLapiz]();     //envio 
+  }
+}
+
+Process NiñoTipoCualquiera [i = 1..N]{
+  int idLapiz;
+  char tipoLapiz{N,C}
+  while true{
+    send pedidoLapizCualquiera(id);                               //envio
+    receive recepcionLapizCualquiera[id](idLapiz, tipoLapiz);  // recibo     
+    delay(10);  //usar lapiz 
+    if (tipoLapiz == 'N') then{      //si el lapiz es negro
+      send devolverLapizNegro[idLapiz]();   //envio
+    }else{
+      send devolverLapizColor[idLapiz]();    //envio
+    }
+  }
+}
+
+
+--------------------------------------------------------------------------------
+ Ahora usaremos PASAJE DE MENSAJES SINCRÓNICOS:
+--------------------------------------------------------------------------------
+
+Process Abuela{
+  integer IdNiño, idLapiz;
+  Cola lapicesColor;
+  Cola lapicesNegro;
+  string tipoLapiz;
+
+  while true{
+    if (LapizColor[*]libre(idLapiz)) ->
+      lapicesColor.push (idLapiz);
+
+    [] (LapizNegro[*]?libre(idLapiz)) ->
+      lapicesNegro.push (idLapiz);
+
+    [] ((not empty (lapicesColor)); NiñoTipoColor[*]?pedir(idNiño)) ->{
+      idLapiz = lapicesColor.pop();
+      NiñoTipoColor[idNiño]!dar(idLapiz);
+    }
+    [] ((not empty (lapicesNegro)); NiñoTipoNegro[*]?pedir(idNiño)) ->{
+      idLapiz = lapicesNegro.pop();
+      NiñoTipoNegro[idNiño]!dar(idLapiz);
+    }
+    [] ((not empty(lapicesNegro)); NiñoTipoCualquiera[*]?pedir(idNiño)) ->{
+      idLapiz = lapicesNegro.pop();
+      NiñoTipoCualquiera[idNiño]!dar(idLapiz, 'negro');
+    }
+    [] ((not empty(LapicesColor)); NiñoTipoCualquiera[*]?pedir(idNiño)) -> {
+      idLapiz = lapicesColor.pop();
+      NiñoTipoCualquiera[idNiño]!dar(idLapiz, 'color');
+    }
+  }
+}
+
+
+Process NiñoTipoColor[i=1..N]{
+  integer idLapiz;
+  while (true){
+    Abuela!pedir(i);
+    Abuela?dar(idLapiz);
+    "Uso el lapiz";
+    LapizColor[idLapiz]!liberar();
+  }
+}
+
+
+Process NiñoTipoNegro[i=1..N]{
+  integer idLapiz;
+  while (true){
+    Abuela!pedir(i);
+    Abuela?dar(idLapiz);
+    "Uso el lapiz";
+    LapizNegro[idLapiz]!liberar();
+  }
+}
+
+
+Process NiñoTipoCualquiera[i=1..N]{
+  integer idLapiz;
+  string tipoLapiz;
+  while (true){
+    Abuela!pedir(i);
+    Abuela?dar(idLapiz, tipoLapiz);
+    if (tipoLapiz == 'negro')
+      LapizNegro[idLapiz]!liberar();
+    else
+      LapizColor[idLapiz]!liberar();
+  }
+  
+}
+
+
+Process LapizNegro[i = 1..cantNegro]{
+  Abuela!libre(i);
+  while true {
+    if (NiñoTipoCualquiera[*]?liberar()) -> Abuela!libre(i);
+    [] (NiñoTipoNegro[*]?liberar()) -> Abuela!libre(i);
+  }
+}
+
+
+Process LapizColor[j = 1..cantColor]{
+  Abuela!libre(i);
+  while true {
+    if (NiñoTipoCualquiera[*]?liberar()) -> Abuela!libre(j);
+    [] (NiñoTipoColor[*]?liberar()) -> Abuela!libre(j);
+  }
+}
+

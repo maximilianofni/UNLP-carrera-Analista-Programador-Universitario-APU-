@@ -1,0 +1,56 @@
+ejercicio 4: Se tiene un curso con 40 alumnos, la maestra entrega una tarea distinta a cada alumno, luego
+cada alumno realiza su tarea y se la entrega a la maestra para que la corrija, esta revisa la tarea
+y si estรก bien le avisa al alumno que puede irse, si la tarea estรก mal le indica los errores, el
+alumno corregirรก esos errores y volverรก a entregarle la tarea a la maestra para que realice la
+correcciรณn nuevamente, esto se repite hasta que la tarea no tenga errores.
+
+// declaracion de variables compartidas
+  sem[40] s_entegarTarea =0;      // arreglo de semaforos  de sincronizacion para entregar tarea
+  sem[40] s_tarea_aCorregir= 0;   // arreglo de semaforos  de sincronizacion de tareas a correcion 
+  queue colaTareas;
+  sem s_mutex = 1  // semaforo para exclusion mutua
+  sem s_corregir = 0;  //  semaforo  de sincronizacion para que la maestra corriga la tarea
+  String[40] tareasOK = {A,D}
+  int i = 1;
+  int idA = 0
+  process alumno [a=1 to 40]
+  {
+paso 4    P(s_entregarTarea[a]) 
+paso 5    //realizar tarea
+paso 6    P(s_mutex)     //empieza la exclusion mutua
+paso 7    colaTareas.push(a);
+paso 8    V(s_mutex)   //termina la exclusion mutua
+paso 9    V(s_corregir) //  hago un V del semaforo de sincronizacion para avisar a la maestra
+paso 10   P(s_tarea_aCorregir[a]) // hago P para bloquear para semaforo pq la profe esta corrigiendo
+          while(tareaOK[idA]=="D")
+          {
+            //realizar tarea otra vez
+            P(s_mutex)     //empieza la exclusion mutua
+            colaTareas.push(a);
+            V(s_mutex)   //termina la exclusion mutua
+            V(s_corregir);
+            P(s_tareas_aCorregir[i]);
+          }
+  }
+
+  PROCESS MAESTRA()
+  var locales
+    int tareasFinalizadas = 0;
+  {
+paso1    for i: 1 to 40{
+paso2        V(s_entregarTarea[i])
+paso3    }
+paso11    while(tareasFinalizadas < 40)
+paso12    {
+paso13        P((s_corregir)) //  hago un P del semaforo de sincronizacion  para bloquear el sem para corregir
+paso14        P(s_mutex)     //empieza la exclusion mutua
+paso15        idA=colaTareas.pop();
+paso16        V(s_mutex)   //termina la exclusion mutua
+               "corregir tarea"
+              if(tareaOK[idA]=="A"){
+                 tareasfinalizadas ++;
+               }  
+             V(s_tarea_aCorregir[idA])
+          }
+    
+  }

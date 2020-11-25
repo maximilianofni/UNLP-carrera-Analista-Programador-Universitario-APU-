@@ -1,0 +1,33 @@
+10. Se debe modelar la atencion en una panaderia por parte de 3 empleados. Hay C clientes que
+ingresan al negocio para ser atendidos por cualquiera de los empleados, los cuales deben
+atenderse de acuerdo con el orden de llegada.
+
+PROCESS CLIENTE [i=1 to N]{
+  recepcion ! (pedido);
+  empleado[*] ? (pedido);
+}
+
+PROCESS RECEPCION{
+var
+   queue pedidos;
+   int pedido;
+   int dame_pan
+  while (true){
+    if [] true; cliente[*] ? (pedido) -> pedidos.push(pedido);
+       [] pedidos.hasElements(); empleado[*] ? (dame_pan) ->  trabajo= pedidos.pop();
+                                                                  empleado[dame_pan] ! trabajo;
+  }
+}
+
+PROCESS EMPLEADO [q=1 to 3]
+var 
+    int pedido
+{
+  while (true){
+    recepcion ! (q);
+    recepcion ? (pedido);
+    delay(10);
+    id_cli = pedido.idcliente();
+    cliente[id_cli] ! pedido;
+  }
+}

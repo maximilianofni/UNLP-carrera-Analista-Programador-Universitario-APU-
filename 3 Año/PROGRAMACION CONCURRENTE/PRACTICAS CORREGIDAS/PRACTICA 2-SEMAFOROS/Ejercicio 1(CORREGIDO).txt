@@ -1,0 +1,32 @@
+Ejercicio 1. 
+Existen N personas que deben ser chequeadas por un detector de metales antes de poder
+ingresar al avión.
+a. Implemente una solución que modele el acceso de las personas a un detector (es decir si
+el detector está libre la persona lo puede utilizar caso contrario debe esperar).
+
+ // declaracion de variables compartidas
+  sem S_detector = 1;
+
+PROCESS PERSONA [i=1 to N]
+{
+    P(S_detector);
+    delay(1); //la persona pasa un detector
+    V(s_detector);
+}
+
+Nota: En este ejercicio utilizamos un solo semaforo inicializado en 1, para controlar el acceso de las personas al detector.
+
+b. Modifique su solución para el caso que haya tres detectores. 
+
+// declaracion de variables compartidas
+  sem S_detector = 3;
+
+PROCESS PERSONA [i=1 to N]
+{
+    P(S_detector);
+    delay(1); //la persona pasa un detector
+    V(s_detector);
+}
+
+Nota: En este caso que hay tres detectores se debe inicializar el semaforo en 3 porque tenemos 3 detectores los cuales van interactuar
+con los procesos y lo que se va hacer es cada vez que ingrese una persona a un detector se va decrementar el semaforo. 

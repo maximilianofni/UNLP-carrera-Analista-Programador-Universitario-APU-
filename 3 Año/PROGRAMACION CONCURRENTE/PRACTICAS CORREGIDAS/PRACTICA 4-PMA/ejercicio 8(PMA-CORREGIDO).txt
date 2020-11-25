@@ -1,0 +1,59 @@
+8) Resolver la administración de las impresoras de una oficina. Hay 3 impresoras, N usuarios y
+1 director. Los usuarios y el director están continuamente trabajando y cada tanto envían
+documentos a imprimir. Cada impresora, cuando está libre, toma un documento y lo
+imprime, de acuerdo con el orden de llegada, pero siempre dando prioridad a los pedidos
+del director. Nota: los usuarios y el director no deben esperar a que se imprima el
+documento.
+
+________________________________________________________________________________________
+________________________________________________________________________________________
+//usando el proceso coordinador(SE PUEDE HACER SIN EL PROCESO COORDINADOR)
+
+chan imprimirDirector(texto)
+chan imprimirUsuario(texto)
+chan Pedido(int)
+chan Siguiente[3](texto)
+chan Sincronizar()
+
+process Usuarios [id: 1..N] {
+	/usuario genera archivo para imprimir
+	send imprimirUsuario (archivo)
+send Sincronizar ()
+	/usuario no espera y se va
+}
+
+process Director [] {
+	/director genera archivo para imprimir
+	send imprimirDirector (archivo)
+send Sincronizar ()
+	/director no espera y se va
+}
+
+process Impresoras [id: 1..3] {
+	while (true) {
+		send Pedido (id)
+		receive Siguiente[id](archivo)
+		/imprimo
+		}
+	}
+}
+
+process Coordinador [] {
+	int idImp 
+	texto archivo
+
+	while (true) {
+		receive Pedido (idImp)
+receive Sincronizar()
+		if (not empty (imprimirDirector) {
+			receive imprimirDirector(archivo)
+			send Siguiente[idImp](archivo)
+		}
+		else {
+			receive imprimirUsuario (archivo)
+			send Siguiente[idImp](archivo)
+		}
+	}
+}
+
+

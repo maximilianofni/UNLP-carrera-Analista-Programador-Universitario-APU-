@@ -1,0 +1,39 @@
+2. Se quiere modelar la cola de un banco que atiende un solo empleado, los clientes llegan y si
+esperan mas de 10 minutos se retiran.
+
+
+Program Banco
+//tenemos dos task el empleado y clientes y tenemos un solo entry que va ser pedido
+
+//DEFINICION DE TASK
+    TASK TYPE Cliente;
+	TASK Empleado IS
+		Entry pedido
+	end Empleado;
+	
+	
+	TASK BODY Empleado IS
+		loop
+			ACCEPT pedido(datos: IN texto, res: OUT texto)
+				res := ResolverPedido(datos);
+			end pedido
+		end loop;
+	end Empleado
+		
+//DEFINICION DE VARIABLES	
+clientes: ARRAY(1..C) OF Cliente;
+e:Empleado;	
+	
+	TASK BODY Cliente IS
+		SELECT 
+			e.pedido(datos, resultado);
+			// resultado es el resultado de mi pedido
+		OR DELAY (10 min)
+			null
+		end SELECT;
+	end Cliente;
+
+//PROGRAMA PRINCIPAL
+begin
+NULL
+end;

@@ -1,0 +1,43 @@
+6)En una empresa hay 5 controladores de temperatura y una Central. Cada controlador toma
+la temperatura del ambiente cada 10 minutos y se la envía a una central para que analice el
+dato y le indique que hacer. Cuando la central recibe una temperatura que es mayor de 40
+grados, detiene a ese controlador durante 1 hora.
+
+
+procedure Empresa is
+	
+//deficion de task y entrys	
+	Task Central is
+		Entry Temoperatura(temp: IN texto, queHace: OUT texto)
+	Task type Controlador;
+
+//definicion de variables
+	controladores: array(1..5) of Controlador;
+    c: Central
+
+	Task Body Controlador is
+		queHago: texto;
+	Begin
+		loop
+			delay (600);
+			c.Temperatura ("temp",queHago);
+			if (queHago != "nada") then
+				delay(3600);
+		end loop;
+	End Controlador;
+
+	Task Body Central is
+		loop 
+			Accept Temperatura (temp, queHace) do
+				if (temp > 40) then	
+					queHace = "frena una hora";
+				else
+					queHace = "nada";
+				end elif;
+			end Temperatura;
+		end loop;
+	end Central;
+BEGIN
+	null;
+END Empresa.
+

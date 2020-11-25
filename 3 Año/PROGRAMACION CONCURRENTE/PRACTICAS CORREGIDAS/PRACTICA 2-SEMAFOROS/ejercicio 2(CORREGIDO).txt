@@ -1,0 +1,28 @@
+Ejercicio 2 
+Un sistema operativo mantiene 5 instancias de un recurso almacenadas en una cola, cuando
+un proceso necesita usar una instancia del recurso la saca de la cola, la usa y cuando termina
+de usarla la vuelve a depositar. 
+
+//declaracion de variables compartidas
+  sem S_mutex = 1;  // semaforo para usar como exclusion mutua
+  sem S_usando_so = 5;    // semaforo para usar al so
+  queue cola;
+
+  process sistema operativo [i=1 to N]{
+    while (true){
+      P(S_usando_so); 
+      P(S_mutex); 
+      cola.pop(); //desencola recurso para usarlo
+      V(S_mutex); //hago V para terminar el acceso a la cola 
+      //utiliza el recurso
+      P(S_mutex); // hago un P sacar acceder a la cola
+      cola.push()  // vuelve a encolar el recurso a la cola
+      V(S_mutex); // hago V para terminar el acceso a la cola
+      V(S_usando_so); //  hago un V para salir del acceso al so para que pueda acceder a otro proceso 
+    }
+  }
+
+Nota: utilizamos 2 semaforos y una cola.
+1 semaforo se inicializa en 1 porque dice el enunciado 5 instancias de un recurso.
+y el otro en 1 pq es un semaforo de exclusion mutua para ir encolando y desencolando los recursos de la estructura cola.
+

@@ -1,0 +1,51 @@
+3. Se debe modelar un buscador para contar la cantidad de veces que aparece un número
+dentro de un vector distribuido entre las N tareas contador. Además existe un
+administrador que decide el número que se desea buscar y se lo envía a los N contadores
+para que lo busquen en la parte del vector que poseen.
+
+//vamos a utilizar dos task 
+
+procedure buscar
+
+//definicion de task
+task type contador;
+task administrador;
+
+//declaracion de variables
+contadores: array(1..N) of Contador;
+admin: administrador
+
+
+task administrador is
+	entry get_numero(n : out integer);
+	entry give_cantidad(cant : in integer);
+end administrador;
+
+task body administrador is
+	I,cant,total,n : integer;
+	total := 0;
+	decidir_numero(n);
+	for I in 1..N loop 
+		accept get_numero(n);
+	end loop;
+	for I in 1..N loop
+		accept give_cantidad(cant);
+		total := total + cant;
+	end loop;
+end administrador;
+
+task body contador is
+	A : array (1..X) of Integer;
+	temp : Integer;
+	admin.get_numero(n);
+	for I in 1..X loop
+		if (A(I)=n) then
+			temp := temp + 1;
+	end loop;
+	admin.give_cantidad(temp);
+end contador;
+
+BEGIN
+	null;
+END buscar.
+
