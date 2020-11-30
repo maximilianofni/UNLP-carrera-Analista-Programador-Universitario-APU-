@@ -8,8 +8,6 @@ simula el uso de la fotocopiadora nroFot. Sólo pueden existir los procesos Usuar
 y el Empleado
 ------------------------------------------------------------------------------------------------------
 COMO RESOLVER? COMO DICE EL ENUNCIADO VAMOS A TENER 2 PROCESOS (USUARIO Y EMPLEADO)
-
-
 ------------------------------------------------------------------------------------------------------
 //DECLARACION DE CANALES
 chan solicitar (int);
@@ -20,16 +18,16 @@ Process Usuario[id: 0..N-1] {
 int numF;
 send solicitar (id);
 receive usar[id](numF);
-UsarFotocopiadora(numF);
+//UsarFotocopiadora(numF);
 send libres (numF);
 };
 ----------------------------------------------------------------------------------------------
 Process Empleado {
-int idU, numF;
-for (i=1; i<11; i++) send libres (i);
-for (i=0; i<N; i++) {
+int idU, idF;
+for (idF=1; i<10; i++) send libres (idF);
+for (idU=0; i<N; i++) {
 receive solicitar (idU);
-receive libres (numF);
-send usar[idU] (numF);
+receive libres (idF);
+send usar[idU] (idF);
 };
 };

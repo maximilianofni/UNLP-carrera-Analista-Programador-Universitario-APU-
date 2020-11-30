@@ -1,4 +1,4 @@
-# ADA
+﻿# ADA
 
 No se puede usar variables compartidas.
 
@@ -47,9 +47,8 @@ No se puede usar variables compartidas.
 	- Select Or: distintas alternativas para ACEPT
 		Ahora existen dos tipos de Clientes:
 			Los que solicitan el estado del trámite.
-			Los que inician un trámite, a estos el empleado les retorna el numero 	de trámite.
+			Los que inician un trámite, a estos el empleado les retorna el numero de trámite.
 		Los clientes que solicitan el estado del trámite deben tener prioridad.
-
 		Task Empleado Is
 			Entry estadoTramite(DNI:IN Tdni,var estado: OUT Testado)
 		Task Body Empleado Is

@@ -1,0 +1,50 @@
+Resolver este ejercicio con ADA. En un banco se tiene un sistema que administra el uso de una sala de reuniones por parte de N clientes. Los clientes se clasifican en Habutyales y Temporales. La sala puede ser usada por un único cliente a la vez, y cuando está libre se debe determinar a quién permitirle su uso dando prioridad a los clientes Habituales. Dentro de cada clase de cliente se debe respetar el orden de llegada. 
+Nota: suponga que existe una función Tipo() que le indica al cliente de que tipo es.
+-----------------------------------------------------------------------------------------------------
+como resolver?
+como dice el enunciado tenemos:
+1 task SALA (con 3 entry uno , usarH, otro usarT y otro liberar)
+1  task CLIENTE
+se dispone de una funcion tipo
+--------------------------------------------------------------------------------------------------
+procedure salaReuniones
+TASK SALA is
+  ENTRY usarH();
+  ENTRY usarT();
+  ENTRY liberar();
+end SALA;
+
+TASK TYPE Cliente;
+--------------------------------------------------------------------------------------------------
+TASK BODY Cliente is
+  string tipo;
+  tipo = Tipo();
+  if (tipo =="Habituales") then
+      Sala.usarH();
+  else
+  Sala.usarT();
+  //usar sala
+  Sala.liberar()
+end Cliente;
+-----------------------------------------------------------------------------------------------------
+TASK BODY Sala is
+    boolean libre = false;
+    loop
+        SELECT when (not libre) => 
+               ACCEPT liberar() do
+                      libre=true;
+                end liberar;
+        OR  when(libre) => 
+          ACCEPT usarH() do
+                libre=false;
+            end usarH;
+        OR   when (libre)&&('usarH'count==0) => 
+            ACCEPT usarT()do
+                   libre=false;
+              end usarT;
+            end SELECT;
+        end SELECT;
+    end loop;
+end;
+
+end procedure

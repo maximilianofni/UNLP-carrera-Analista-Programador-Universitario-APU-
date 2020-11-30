@@ -1,0 +1,48 @@
+Resolver este ejercicio con PMS. En un banco se tiene un sistema que administra el uso de una sala de reuniones por parte de N clientes. Los clientes se clasifican en Habituales y Temporales. La sala puede ser usada por un único cliente a la vez, y cuando está libre se debe determinar a quién permitirle su uso dando prioridad a los clientes Habituales. Dentro de cada clase de cliente se debe respetar el orden de llegada. 
+Nota: suponga que existe una función Tipo() que le indica al cliente de que tipo es.
+----------------------------------------------------------------------------------------------------
+como resolver ? 
+como dice el enunciado tenemos:
+ 1 proceso cliente
+ 1 proceso sala
+1 proceso administrados para q administre el uso de la sala
+Tenemos que dar prioridad a los clientes habituales.
+disponemos de una funcion tipo
+--------------------------------------------------------------------------------------------------------
+Queue colaHabituales, colaTemporales;
+-------------------------------------------------------------------------------------
+Process Cliente[i:1..N]{
+  String tipo= Tipo(); // funcion q nos devuelve el tipo
+  if (tipo =="Habituales"){  //si el cliente es habitual
+    Admin!encolarHab(i);  // le enviamos al admin el msj para que lo encole en el canal de habituales
+  }else
+    Admin!encolarTem(i);// sino le enviamos al admin el msj para que lo encole en el canal de temporales
+  Admin?usar();  // recibe el msj para que use la sala
+  //Uso de la sala
+  Sala!termino(); // envia el msj que termino de usar la sala
+}
+------------------------------------------------------------------------------------
+Process Sala{
+  while(true){
+    Admin!SalaLibre();  // envia el msj que esta la sala libre
+    Cliente[*]?termino();  // recibe el msj que termino de usarlo el cliente tal
+  }
+}
+
+--------------------------------------------------------------------------------------
+
+Process Admin{
+var 
+int cliente 
+  while(true){
+      if Cliente[*]?encolarHab(cliente) ->// si en el canal hay un cliente habitual
+            colaHab.push(cliente);  // lo encolo en la cola habitual
+      if Cliente[*]?encolarTem(cliente) -> // si en el canal hay un cliente temporal 
+            colaTem.push(cliente);  // lo encolo en la cola temporal
+      if(not empty(colaHab))Sala?libre()-> //pregunto si la cola de habitiuales no esta vacia y recibo el msj de la sala
+          Cliente[colaHab.pop(cliente)]!usar();  // desencolo a una persona habitual y le mando el msj para que lo use 
+      if(not empty(colaTem) and empty(colaHab)) Sala?libre()-> // si la cola de temporales no esta vacia y la cola habituales esta vacia , recive la sala que esta libre
+          Cliente[colaTem.pop(usuario)]!usar(); // le envio el msj al cliente que lo use
+  }
+}
+---------------------------------------------------------------------------------------

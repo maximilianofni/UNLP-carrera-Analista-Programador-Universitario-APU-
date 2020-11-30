@@ -1,0 +1,51 @@
+Resolver con PMA (Pasaje de mensajes Asincronicos) el siguiente problema. En una clase
+de la materia hay 3 ayudantes que deben responder consultas de A alumnos de acuerdo al orden de llegada. Cada alumno cuando llega espera a que cualquier ayudante le responda la consulta y se retira(hace una sola consulta). Cada vez que un ayudante esta libre aprovecha a corregir un parcial(hasta no terminarlo no puede atender consultas). Nota: maximiizar la concurrencia y no generar demora innecesaria
+_________________________________________________________________________
+COMO RESOLVERLO:
+como vemos en el enunciado vamos a tener:
+ un proceso de 1 a 3 ayudantes, 
+otro proceso para los A alumnos
+ un proceso Administrador para coordinar a los ayudantes cuando estan libres para dar consultas o corregir parciales.
+___________________________________________________________________
+//declaracion de canales
+chan solicitarConsulta (int id,string "consulta");  // canal para q el usuario solite la consulta
+chan seRetira(int id); // canal para cuando el usuario se retire despues de realizar la consulta
+chan Ayudantelibre (int ayu); // canal para cuando haya un ayudante libre
+chan contestarConsulta[idA](int idAyu)  // arreglo  de canales para cuando el ayudante conteste la consulta
+chan CorregirParcial(int idAyu)  // canal para que ayudante corriga el parcial
+-----------------------------------------------------------------------------------------------------
+process Alumno [idA: 0..n-1]{
+int consulta;
+send solicitarConsulta (idA, consulta);  //enviar solicitud de consulta
+//realizar consulta 
+receive seRetira[idA);  // recibio el msj que se retira el alumno
+}
+
+Process Ayudante [i:1..3] {
+int idAlu, consulta 
+while (true) {
+send libre(i); // envio el mensaje que hay un ayudante libre
+receive contestarConsulta(idAlu, consulta); // recibo el mensaje que hay una consulta 
+if (consulta == NULL) // si no hay consultas
+{
+send CorregirParcial(intAlu); // envia el msj  de corregir parciales
+else
+send resolverConsulta[idAlu](consulta);  // envia el msj de responder consulta
+}
+} 
+
+
+Process Administrador {
+Cola pedidos;
+int idAyu, idAlu, consulta
+
+while (true) {
+receive libre(idAyu); // recibe el mensaje que hay un ayudante libre
+if (notEmpty(solicitarConsulta))) { // si el canal no esta vacio
+receive solicitarConsulta(id, consulta); // recibe el mensaje que hay consulta
+send resolverConsulta[idA](id, consulta); // envia el msj de la consulta
+} 
+else {
+send resolverConsulta(idAlu, null); // envia msj con la consulta vacia
+ }
+}

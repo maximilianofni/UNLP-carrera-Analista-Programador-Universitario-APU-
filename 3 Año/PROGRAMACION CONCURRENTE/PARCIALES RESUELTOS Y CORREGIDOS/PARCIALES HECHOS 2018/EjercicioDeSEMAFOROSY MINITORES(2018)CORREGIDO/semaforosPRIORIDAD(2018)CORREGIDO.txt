@@ -1,7 +1,9 @@
 En un parque de diversiones hay 15 autitos chocadores que son usados por A personas adultas y N personas menores. Cada persona repetidamente , usa un autito en turnos de 30 minutos. El parque tiene 2 reglas de seguridad: (1) no permiten que haya más de 10 menores al mismo tiempo usando autitos, (2) no permiten que haya más de 8 adultos al mismo tiempo usando autitos.Nota: maximizar la concurrencia
 -------------------------------------------------------------------------------------------------------
 COMO REALIZARLO?
-Como dice el enunciado tenemos 2 procesos donde en 1 tenemos A personas Adultas y otro N personas menores, donde las personas utilizan el auto durante 30 min Y tiene que cumplir con 2 reglas
+Como dice el enunciado tenemos:
+ 1 proceso donde tenemos A personas Adultas 
+ 1 otro proceso con N personas menores, donde las personas utilizan el auto durante 30 min Y tiene que cumplir con 2 reglas( es decir, cumpliendo  una prioridad)
 ---------------------------------------------------------------------------------------------------------
 var // declaracion de variables
 sem S_TotMayores= 8 // variable inicializado en 8 de tipo semaforo para simular cantidad de personas mayores que pueden usar los autos

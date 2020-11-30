@@ -1,13 +1,17 @@
-10. Se debe modelar la atencion en una panaderia por parte de 3 empleados. Hay C clientes que
-ingresan al negocio para ser atendidos por cualquiera de los empleados, los cuales deben
-atenderse de acuerdo con el orden de llegada.
-
+10. Se debe modelar la atencion en una panaderia por parte de 3 empleados. Hay C clientes que ingresan al negocio para ser atendidos por cualquiera de los empleados, los cuales deben atenderse de acuerdo con el orden de llegada.
+---------------------------------------------------------------------------------------------------------
+como resolver?
+como dice el enunciado tenemos:
+un proceso cliente 1 a n
+un proceso empleado 1 a 3
+un proceso administrador
+----------------------------------------------------------------------------------------------------------
 PROCESS CLIENTE [i=1 to N]{
   recepcion ! (pedido);
   empleado[*] ? (pedido);
 }
 
-PROCESS RECEPCION{
+PROCESS recepcion{
 var
    queue pedidos;
    int pedido;

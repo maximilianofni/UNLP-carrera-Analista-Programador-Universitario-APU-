@@ -5,7 +5,7 @@ atienda, y al terminar se retira. Nota: maximizar la concurrencia; suponga que
 existe una función Atender() llamada por el empleado que simula la atención.
 --------------------------------------------------------------------------------------------------------
 COMO RESOLVER? 
-COMO DICE EL ENUNCIADO TENEMOS UN PROCESO EMPEADO Y OTRO CLIENTE.
+COMO DICE EL ENUNCIADO TENEMOS UN PROCESO EMPEADO , OTRO CLIENTE y un administrador.
 ---------------------------------------------------------------------------------------------------------
 Procedure ParcialADAis
 //DEFINICION DE TASK Y ENTRYS
@@ -34,8 +34,8 @@ acceptIdentificación (ident: IN integer) do
 id := ident;
 end Identificación;
 Admin.Solicitar (id);
-acceptInicio (datos: OUT text) do
-datos := Listado de compras
+accept Inicio(datos: OUT text) do
+datos := "Listado de compras"
 end Inicio;
 acceptRespuesta (res: IN text) do
 resultado := res;

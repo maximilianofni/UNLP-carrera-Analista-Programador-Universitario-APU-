@@ -7,15 +7,17 @@ calcular el porcentaje de aprobación. Nota: suponga que existe una función
 nota = Corregir(examen) que es llamada por los ayudantes para corregir un examen,
 y retorna la nota del mismo (A o D). Maximizar la concurrencia.
 ------------------------------------------------------------------------------------------------------
-COMO RESOLVER? COMO DICE EL ENUNCIADO TENEMOS 2 PROCESOS (AYUDANTE Y TITULAR)
-
+COMO RESOLVER? 
+COMO DICE EL ENUNCIADO TENEMOS
+ 2 PROCESOS (AYUDANTE Y TITULAR)
+dispongo de una funcion corregir que retorna A o D
 ----------------------------------------------------------------------------------------------------
 //Variable compartidas
-sem mutex = 1;
-sem listo = 0;
-int totalAprobados = 0;
+sem mutex = 1;  //para exclusion mutua 
+sem listo = 0;      //para sincronizar con el proceso titular
+int totalAprobados = 0; // para sacar porcentaje
 ----------------------------------------------------------------------------------------------------
-Process Usuario[id: 0..C-1] {
+Process Usuario[id: 0..25] {
 int i, cantAprobados;
 text examenes[20];
 char notas[20];
@@ -32,8 +34,7 @@ V(listo);
 -------------------------------------------------------------------------------------------
 Process Titular
 {
-int i;
-float resultado;
+int i, resultado;
 for (i=0; i<25; i++) 
 P(listo);
 resultado = (totalAprobados * 100)/500;

@@ -13,16 +13,19 @@ Monitor Corralon {
 queue colaC;
 int numEmpleado[N];
 cond esperaC, esperaE;
+----------------------------------------------------------------------------------------------------------
 Procedure Encolar (int C, OUT int E) {
 push(colaC, C);
 signal(esperaE);
 wait (esperaC);
 E = numEmpleado[C];
 };
+
 Procedure Siguiente(int idE) {
 int idC;
 while (empty(colaC)) wait(esperaE);
 pop(colaC, idC);
+signal(esperaC) // PREGUNTAR??
 numEmpleado[idC] = idE;
 };
 }

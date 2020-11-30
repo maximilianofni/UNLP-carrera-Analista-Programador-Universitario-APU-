@@ -13,19 +13,19 @@ COMO DICE EL ENUNCIADO VAMOS A TENER UN PROCESO EMPLEADO
 
 -----------------------------------------------------------------------------------------------------
 DEFINICION DE CANALES
-chan solicitar (int);
-chan usarCabina[N] (int);
-chan liberar (int, int);
-chan irse[N] ()
+chan solicitar (idCli);  // canal para que el usuario solicite
+chan usarCabina[idCabina] (idCli);  // arreglo de canales para guardar al usuario y la cabina
+chan liberar (idCli, idCabina);// 
+chan irse[idCabina] ()
 ----------------------------------------------------------------------------------------------------
 
-Process Cliente[id: 0..N-1] {
+Process Cliente[idC: 0..N-1] {
 int numC;
-send solicitar (id);
-receive usarCabina[id](numC);
-//Usa la cabina Telefónica numC
-send liberar (id, numC);
-receive irse[id] ();
+send solicitar (idC); // enviar solicitar cabina 
+receive usarCabina[idC](numC); // recibe usar cabina 
+//Usa la cabina Telefónica
+send liberar (idC, numC); //envia liberar cabina
+receive irse[idC] (); // recibe el msj irse
 };
 
 ---------------------------------------------------------------------------------------------------
@@ -33,15 +33,15 @@ receive irse[id] ();
 Process Empleado {
 int idC, numC, i;
 queue libres;
-for (i=1; i<11; i++) 
+for (i=1; i<10; i++) 
 push (libres, i);
 while (true) {
-if (not empty (liberar)) ?
+if (not empty (liberar)) {
 receive liberar (idC, numC);
 Cobrar(numC, idC);
 send irse[idC] ();
 push (libres, numC);
-[](not empty (libres)) and (empty (liberar)) and (not empty (solicitar)) ?
+[](not empty (libres)) and (empty (liberar)) and (not empty (solicitar)) {
 receive solicitar (idC);
 pop (libres, numC);
 send usarCabina[idC] (numC);
