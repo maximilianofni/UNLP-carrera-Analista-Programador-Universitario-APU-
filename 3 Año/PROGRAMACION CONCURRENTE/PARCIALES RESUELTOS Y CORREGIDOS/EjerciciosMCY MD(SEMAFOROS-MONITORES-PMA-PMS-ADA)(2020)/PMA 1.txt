@@ -8,7 +8,8 @@ suponga que hay una función Cobrar() llamada por el empleado que simula que el
 empleado le cobra al cliente.
 ------------------------------------------------------------------------------------------------------
 COMO RESOLVER?
-COMO DICE EL ENUNCIADO VAMOS A TENER UN PROCESO EMPLEADO
+COMO DICE EL ENUNCIADO VAMOS A TENER
+ UN PROCESO EMPLEADO
  Y UN PROCESO CLIENTE
 
 -----------------------------------------------------------------------------------------------------

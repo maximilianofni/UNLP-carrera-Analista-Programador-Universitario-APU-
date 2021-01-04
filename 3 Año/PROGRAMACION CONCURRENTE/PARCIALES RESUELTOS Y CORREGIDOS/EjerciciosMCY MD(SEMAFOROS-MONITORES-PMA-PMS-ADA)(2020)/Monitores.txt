@@ -7,7 +7,6 @@ entregue la factura. Nota: maximizar la concurrencia; suponga que existe una fun
 HacerFactura()llamada por el empleado que simula la atención.
 ----------------------------------------------------------------------------------------------------
 como resolver? definimos un monitor corral y empleado
-
 ----------------------------------------------------------------------------------------------------
 Monitor Corralon {
 queue colaC;
@@ -35,6 +34,7 @@ Monitor Escritorio[id: 0..3] {
 text pedido, factura;
 bool listo = false;
 cond espera, esperaE;
+----------------------------------------------------------------------------------------
 Procedure Atender (text P, OUT text F) {
 pedido = P;
 listo = true;
@@ -43,11 +43,13 @@ wait (esperaC);
 F = factura;
 signal (esperaE);
 };
+
 Procedure VerPedido (OUT text P) {
 if (not listo) wait (esperaE);
 listo = false;
 P = pedido;
 };
+
 Procedure DarFactura (text F) {
 factura = F;
 signal (esperaC);
