@@ -23,7 +23,7 @@ int totalAprobados = 0; // para sacar porcentaje
 
 ----------------------------------------------------------------------------------------------------
 
-Process Usuario[id: 0..25] {
+Process Ayudante[id: 0..25] {
 int i, cantAprobados;
 text examenes[20];
 char notas[20];
