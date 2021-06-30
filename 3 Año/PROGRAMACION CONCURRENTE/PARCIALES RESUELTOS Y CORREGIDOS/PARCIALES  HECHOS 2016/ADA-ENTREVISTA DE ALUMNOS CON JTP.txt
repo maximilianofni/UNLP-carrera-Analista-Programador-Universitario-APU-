@@ -1,5 +1,6 @@
 En una facultad existen A alumnos los cuales quieren entrevistarse con el jefe de la oficina
-de alumnos. El jefe de dicha oficina atiende al alumno que más entrevistas pidió. En la entrevista el alumno le entrega su problema y el jefe lo analiza y le informa la solucion.
+de alumnos. El jefe de dicha oficina atiende al alumno que más entrevistas pidió. 
+En la entrevista el alumno le entrega su problema y el jefe lo analiza y le informa la solucion.
 Nota: realizar el ejercicio con ADA. Maximizar la concurrencia. Los alumnos se entrevistan
 una única vez. El jefe de la oficina está continuamente atendiendo gente.
 ------------------------------------------------------------------------------------------------------

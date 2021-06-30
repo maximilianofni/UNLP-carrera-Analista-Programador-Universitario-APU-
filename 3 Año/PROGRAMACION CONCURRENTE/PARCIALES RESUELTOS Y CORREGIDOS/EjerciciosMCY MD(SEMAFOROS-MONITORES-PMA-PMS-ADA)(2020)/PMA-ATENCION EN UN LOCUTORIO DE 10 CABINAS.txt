@@ -11,13 +11,14 @@ COMO RESOLVER?
 COMO DICE EL ENUNCIADO VAMOS A TENER
  UN PROCESO EMPLEADO
  Y UN PROCESO CLIENTE
-
+PROBLEMA: SIMULAR LA ATENCION A UN LOCUTORIO DONDE LOS CLIENTES VAN  A USAR UNA CABINA Y LUEGO LE PAGAN AL EMPLEADO 
+Y SE RETIRAN 
 -----------------------------------------------------------------------------------------------------
 DEFINICION DE CANALES
-chan solicitar (idCli);  // canal para que el usuario solicite
+chan solicitar (idCli);  // canal para que el usuario solicite una cabina 
 chan usarCabina[idCabina] (idCli);  // arreglo de canales para guardar al usuario y la cabina
-chan liberar (idCli, idCabina);// 
-chan irse[idCabina] ()
+chan liberar (idCli, idCabina);// arreglo de canales para liberar al usuario de la cabina
+chan irse[idCabina] ()  // se va de la cabina
 ----------------------------------------------------------------------------------------------------
 
 Process Cliente[idC: 0..N-1] {
@@ -34,18 +35,20 @@ receive irse[idC] (); // recibe el msj irse
 Process Empleado {
 int idC, numC, i;
 queue libres;
-for (i=1; i<10; i++) 
+// recorro con un for asegurandome que las cabinas esten habilitadas
+for (i=1; i<10; i++) {
 push (libres, i);
+}
 while (true) {
-if (not empty (liberar)) {
-receive liberar (idC, numC);
-Cobrar(numC, idC);
-send irse[idC] ();
-push (libres, numC);
-[](not empty (libres)) and (empty (liberar)) and (not empty (solicitar)) {
-receive solicitar (idC);
-pop (libres, numC);
-send usarCabina[idC] (numC);
+if (not empty (liberar)) { // si hay cabinas para liberar 
+receive liberar (idC, numC); // libero una cabina con el cliente
+Cobrar(numC, idC);  // cobrar al cliente y su cabina
+send irse[idC] ();   // el cliente se va
+push (libres, numC); //apilo una cabina a la cola
+[](not empty (libres)) and (empty (liberar)) and (not empty (solicitar)) {  // si hay cabinas libre y el canal de liberada este vacia  y el canal de solicitar  no este vacia 
+receive solicitar (idC);  // recibo el solicitar
+pop (libres, numC);  // desencolo una cabina de la cola
+send usarCabina[idC] (numC); // envio usar cabina 
 fi;
 };
 }

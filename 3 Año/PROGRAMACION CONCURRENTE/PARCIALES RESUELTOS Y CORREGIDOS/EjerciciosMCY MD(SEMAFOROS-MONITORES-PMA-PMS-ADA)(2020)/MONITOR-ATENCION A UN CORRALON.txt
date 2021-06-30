@@ -1,0 +1,86 @@
+Resolver con MONITORES la siguiente situación. 
+Simular la atención en un corralón de materiales donde hay 4 empleados para atender a N clientes de acuerdo al
+orden de llegada. Cuando el cliente llega espera a que alguno de los empleados lo
+llame, se dirige hasta el escritorio del mismo y le entrega el listado de materiales que
+debe comprar, luego queda esperando a que terminen de atenderlo y el empleado le
+entregue la factura. Nota: maximizar la concurrencia; suponga que existe una función
+HacerFactura()llamada por el empleado que simula la atención.
+----------------------------------------------------------------------------------------------------
+como resolver? 
+tenemos un proceso de n clientes 
+tenemos un proceso de 4 empleados  
+Problema:  Ir encolando a los clientes  hasta q un empleado los atienda y una vez q le atiende
+ le entrega la lista de materiales , compra y le entrega la factura 
+definimos un monitor corral y escritorio
+----------------------------------------------------------------------------------------------------
+
+Process Cliente[id: 0..N-1] {
+text factura, pedido;
+int idE;
+Corralon.Encolar(id, idE);
+Escritorio[idE].Atender(pedido, factura);
+};
+---------------------------------------------------
+Process Empleado[id: 0..3] {
+text factura, pedido;
+while (true) {
+Corralon.Siguiente(id);
+Escritorio[id].VerPedido(pedido);
+factura = HacerFactura(pedido);
+Escritorio[id].DarFactura(factura);
+}
+};
+-----------------------------------------------
+
+
+Monitor Corralon {
+queue colaC; // donde vamos a almacenar los clientes 
+int numEmpleado[N]; // almacenamos el num del empleado
+cond esperaC, esperaE;  // dos variables condicion
+----------------------------------------------------------------------------------------------------------
+Procedure Encolar (int C,  int E) {
+push(colaC, C); // encolo al cliente
+signal(esperaE); // despierto a un empleado
+wait (esperaC);  // duerme al  cliente
+E = numEmpleado[C]; // me guardo el empleado que esta atendiendo
+};
+
+Procedure Siguiente(int idE) {
+int idC;
+while (empty(colaC)) wait(esperaE);  // mientras no haya clientes , duermo al empleado
+pop(colaC, idC);  //desencolo a un cliente
+signal(esperaC) //  // despierto al cliente 
+numEmpleado[idC] = idE; //me guardo el empleado que atendio
+};
+}
+----------------------------------------------------------------------------------------------------
+
+Monitor Escritorio[id: 0..3] {
+text pedido, factura;
+bool listo = false;
+cond espera, esperaE;
+----------------------------------------------------------------------------------------
+Procedure Atender (text P,  text F) {
+pedido = P;
+listo = true;
+
+signal (esperaE); // despierta al empleado
+wait (esperaC);  // duerme al cliente
+//atendiendo
+F = factura;   // me guardo el empleado
+signal (esperaE);-------------------------------  
+};
+
+Procedure VerPedido ( text P) {
+if (not listo) wait (esperaE); // no tiene pedido , duermo al empleado
+listo = false;  
+P = pedido;  // me guardo el pedido 
+};
+
+Procedure DarFactura (text F) {
+factura = F;  // almaceno la factura  
+signal (esperaC);  //despierto al cliente
+wait (esperaE);   // duermo al empleado
+};
+}
+------------------------------------------------------------------------------------------

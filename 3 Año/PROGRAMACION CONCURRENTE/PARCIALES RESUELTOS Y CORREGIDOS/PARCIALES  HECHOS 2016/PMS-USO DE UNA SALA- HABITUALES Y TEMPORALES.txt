@@ -37,12 +37,12 @@ int cliente
   while(true){
       if Cliente[*]?encolarHab(cliente) ->// si en el canal hay un cliente habitual
             colaHab.push(cliente);  // lo encolo en la cola habitual
-      if Cliente[*]?encolarTem(cliente) -> // si en el canal hay un cliente temporal 
+      [] Cliente[*]?encolarTem(cliente) -> // si en el canal hay un cliente temporal 
             colaTem.push(cliente);  // lo encolo en la cola temporal
-      if(not empty(colaHab))Sala?libre()-> //pregunto si la cola de habitiuales no esta vacia y recibo el msj de la sala
+      [](not empty(colaHab))Sala?libre()-> //pregunto si la cola de habitiuales no esta vacia y recibo el msj de la sala
           Cliente[colaHab.pop(cliente)]!usar();  // desencolo a una persona habitual y le mando el msj para que lo use 
-      if(not empty(colaTem) and empty(colaHab)) Sala?libre()-> // si la cola de temporales no esta vacia y la cola habituales esta vacia , recive la sala que esta libre
-          Cliente[colaTem.pop(usuario)]!usar(); // le envio el msj al cliente que lo use
+      [](not empty(colaTem) and empty(colaHab)) Sala?libre()-> // si la cola de temporales no esta vacia y la cola habituales esta vacia , recive la sala que esta libre
+          Cliente[colaTem.pop(cliente)]!usar(); // le envio el msj al cliente que lo use
   }
 }
 ---------------------------------------------------------------------------------------

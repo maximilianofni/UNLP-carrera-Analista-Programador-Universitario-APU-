@@ -13,6 +13,8 @@ COMO RESOLVER?
 COMO DICE EL ENUNCIADO TENEMOS
  2 PROCESOS (AYUDANTE Y TITULAR)
 dispongo de una funcion corregir que retorna A o D
+PROBLEMA A RESOLVER: Los ayudantes deben  corregir 20 examenes y  contar la cantidad de parciales aprobados y cuando terminaron le deben avisar al
+Profesor titular y el profesor titular sacar el porcentaje. 
 
 ----------------------------------------------------------------------------------------------------
 
@@ -24,9 +26,11 @@ int totalAprobados = 0; // para sacar porcentaje
 ----------------------------------------------------------------------------------------------------
 
 Process Ayudante[id: 0..25] {
+variables del proceso
 int i, cantAprobados;
 text examenes[20];
 char notas[20];
+-----------------------------
 for (i=0; i<20: i++) {
 notas[i] = corregir(exámenes[i]);
 if (notas[i] == ‘A’) cantAprobados++;
@@ -41,8 +45,11 @@ V(listo);
 
 Process Titular
 {
+variables del proceso
 int i, resultado;
-for (i=0; i<25; i++) 
+-----------------------
+for (i=0; i<25; i++) {
 P(listo);
+}
 resultado = (totalAprobados * 100)/500;
 };

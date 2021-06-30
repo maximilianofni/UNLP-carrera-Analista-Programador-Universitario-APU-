@@ -13,34 +13,40 @@ bueno como dice el ejercicio tenemos 15 autos, entonces vamos a tener las siguie
 _________________________________________________________________________
 
 Var // declaracion de variables
-Sem  S_Esperando:= 0;// semaforo para ir sincronizando los autos
-Sem S_Barrera := 1; // semaforo para la  exclusion mutua hasta que lleguen todos los autos
+Sem  S_barrera:= 0;// semaforo para ir sincronizando los autos
+Sem S_mutex := 1; // semaforo para la  exclusion mutua hasta que lleguen todos los autos
 Sem S_EM:= 1;// semáforo para ir guardando la posición de cada auto
 Posiciones array[1..15]; // arreglo de posiciones
-cant, a : 0;// variables para ir sumando para luego almacenar en el arreglo de posiciones
+cant : 0;// variables para ir sumando para luego almacenar en el arreglo de posiciones
+ corria
+a: 1;
 
-Process Auto[idAuto: 1..15]
+
+process AUTO[idAuto: 1..15];
 {
-     P(S_Barrera) // decremento el semaforo para que ingresen de 1 y duermo al semaforo)
+     P(S_mutex) // decremento el semaforo para que ingresen de 1 y duermo al semaforo)
     IF( cant <= 15 ) // si la cantidad en menor a 15 
     {
        cant:= cant +1; //incremento mi cant de autos(hasta llegar a 15)
-       V(S_Barrera);//incremento el semaforo para  (despertarlo) 
-       P(S_Esperando)// duermo el semáforo hasta que lleguen todo los autos
+       V(S_mutex);//incremento el semaforo para  (despertarlo) 
+       P(S_barrera)// duermo el semáforo hasta que lleguen todo los autos
     }
 ELSE
 {
- V(S_Barrera) //incremento el  semaforo si la cantidad de autos es 15)
+ V(S_mutex) //incremento el  semaforo si la cantidad de autos es 15)
 for idAuto: 1 to 14
 {
- V(Sem_Esperando)// despierto al semaforo porque llegaron todos
+ V(Sem_barrera)// despierto al semaforo porque llegaron todos
 }
 }//termina el else
+
 // comenzar carrera
+//fin de carrera
 P(S_EM); // decremento en 0 el semaforo para que ningun proceso ingrese a modificar el valor a sección critica
-Posiciones[idAuto]:= a; // guardo en a en el arreglo de posiciones
+Posiciones[idAuto]:= pero; // guardo en a en el arreglo de posiciones
 a:= a +1; //Incremento en 1 el contador de autos que llegaron
 V(S_EM) // incremento en 1 el semaforo para decir que ya puede modificar el valor de cant  un proceso
+
 }
 }
 

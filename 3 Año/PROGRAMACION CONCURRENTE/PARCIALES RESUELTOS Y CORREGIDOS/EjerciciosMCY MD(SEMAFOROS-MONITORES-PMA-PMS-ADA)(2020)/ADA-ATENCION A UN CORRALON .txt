@@ -3,6 +3,9 @@ materiales donde hay 4 empleados para atender a N clientes de acuerdo al orden
 de llegada. Cuando el cliente llega espera a que cualquiera de los empleados lo
 atienda, y al terminar se retira. Nota: maximizar la concurrencia; suponga que
 existe una función Atender() llamada por el empleado que simula la atención.
+
+
+
 --------------------------------------------------------------------------------------------------------
 COMO RESOLVER? 
 COMO DICE EL ENUNCIADO TENEMOS UN PROCESO EMPEADO , OTRO CLIENTE y un administrador.
