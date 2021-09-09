@@ -1,5 +1,5 @@
 # UNLP
-## Carpetas con informacion de las materias cursadasen la Universidad Nacional de la Plata
+## Carpetas con informacion de las materias cursadas en la Universidad Nacional de la Plata
 ## Carrera: Analista Programador Universitario
 
 #1 AÑO 
@@ -23,8 +23,28 @@
    * 
   
  - introduccion a sistemas operativos(ISO)
-   * conceptos y practica de scripting usando el sistema operativo linux(ubuntu, debian, etc) 
+   * conceptos y practica de scripting , uso de comandos,  usando el sistema operativo linux(ubuntu, debian, etc), entornos virtuales. 
 
- - 
- 
- 
+ - Algoritmos y Estructuras de datos(ayed)
+    *
+   
+ #3 Año
+   - Ingenieria de software 2 (inge2)
+     * 
+   
+   - Programacion Concurrente
+     *
+   
+   - Programacion orientada a objetos 2(Poo2)
+    *
+   
+   - Proyecto de software
+   *
+   
+   - Taller de tecnologias de software(TTPS)
+    *
+
+
+
+
+
