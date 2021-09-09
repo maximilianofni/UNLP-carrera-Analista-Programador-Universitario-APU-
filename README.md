@@ -4,15 +4,15 @@
 
 #1 AÑO 
  - ALGORITMOS DATOS Y PROGRAMAS(ADP)
-      * lenguaje pascal
-    
+      * conceptos basicos y practica de estructuras de control(if,for,while,case), y tipos de datos como(arreglos, listas, arboles, TAD) en lenguaje PASCAL.
+     
  - ORGANIZACION DE COMPUTADORAS(OC) y Arquitectura de computadoras(AC)
-     * assembler
+     * conceptos y practica de sistemas de numeracion, como funcionan las rutinas en assembler y codigo en assembly 
 
 #2 AÑO
  - INTRODUCCION A BASE DE DATOS(IBD)
      * conceptos y practica de archivos, arboles, hashing
-     * conceptos y practica de diagrama entidad relacion(der), pasaje al logico y fisico, algebra relacional y sql
+     * conceptos y practica de diagrama entidad relacion(der), pasaje al logico y fisico, algebra relacional y SQL
  
  - seminario de lenguajes(opcion PHP y ANDROID)
  
@@ -22,3 +22,9 @@
  - Ingenieria de Software 1 (Ing1)
    * 
   
+ - introduccion a sistemas operativos(ISO)
+   * conceptos y practica de scripting usando el sistema operativo linux(ubuntu, debian, etc) 
+
+ - 
+ 
+ 
