@@ -31,7 +31,7 @@
    
  #3 Año
    - Ingenieria de software 2 (inge2)
-   - 
+    
     * 
    
    - Programacion Concurrente
@@ -39,16 +39,13 @@
     *
    
    - Programacion orientada a objetos 2(Poo2)
-   
-   *
+    *
    
    - Proyecto de software
-   
-   *
+    *
    
    - Taller de tecnologias de software(TTPS)
-   
-   *
+    *
 
 
 
