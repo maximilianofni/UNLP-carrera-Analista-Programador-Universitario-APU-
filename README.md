@@ -26,23 +26,29 @@
    * conceptos y practica de scripting , uso de comandos en el sistema operativo linux(ubuntu, debian, etc), entornos virtuales. 
 
  - Algoritmos y Estructuras de datos(ayed)
-    *
+
+   *
    
  #3 Año
    - Ingenieria de software 2 (inge2)
-     * 
+   - 
+    * 
    
    - Programacion Concurrente
-     *
-   
-   - Programacion orientada a objetos 2(Poo2)
+    
     *
    
+   - Programacion orientada a objetos 2(Poo2)
+   
+   *
+   
    - Proyecto de software
+   
    *
    
    - Taller de tecnologias de software(TTPS)
-    *
+   
+   *
 
 
 
