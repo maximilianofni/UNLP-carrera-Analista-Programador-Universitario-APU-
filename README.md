@@ -2,14 +2,14 @@
 ## Carpetas con informacion de las materias cursadas en la Universidad Nacional de la Plata
 ## Carrera: Analista Programador Universitario
 
-#1 AÑO 
+**1 AÑO**
  - ALGORITMOS DATOS Y PROGRAMAS(ADP)
       * conceptos basicos y practica de estructuras de control(if,for,while,case), y tipos de datos como(arreglos, listas, arboles, TAD) en lenguaje PASCAL.
      
  - ORGANIZACION DE COMPUTADORAS(OC) y Arquitectura de computadoras(AC)
      * conceptos y practica de sistemas de numeracion, como funcionan las rutinas en assembler y codigo en assembly 
 
-#2 AÑO
+**2 AÑO**
  - INTRODUCCION A BASE DE DATOS(IBD)
      * conceptos y practica de archivos, arboles, hashing
      * conceptos y practica de diagrama entidad relacion(der), pasaje al logico y fisico, algebra relacional y SQL
@@ -29,7 +29,7 @@
 
    *
    
- #3 Año
+ **3 AÑO**
    - Ingenieria de software 2 (inge2)
     
     * 
