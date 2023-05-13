@@ -55,4 +55,13 @@ materia donde se estudian los procesos, técnicas y herramientas utilizadas en e
     - Conceptos de calidad y la CMMI
 
 **Introducción a sistema operativos**:
-
+ Los temas que se pueden estudiar en esta materia son:
+ 
+        - Definición de sistemas operativos y su función en el uso de la computadora.
+        - Arquitectura de los sistemas operativos: kernel, shell, sistema de archivos, sistema de entrada y salida, y otros componentes.
+        - Tipos de sistemas operativos: monousuario, multiusuario, multitarea, multiproceso, y distribuidos.
+        - Procesos y threads: creación, gestión, sincronización, comunicación, y concurrencia
+        - Manejo de memoria: partición fija, partición variable, paginación, segmentación y segmentación con paginación.
+        - Entrada y salida: dispositivos de entrada y salida, controladores de dispositivos, interrupciones, DMA y acceso directo a memoria.
+        - Administración de usuarios y permisos en el sistema operativo.
+        - Comandos en sistemas operativos LINUX.
