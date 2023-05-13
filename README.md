@@ -7,8 +7,8 @@ carpetas de las materias cursadas en la Universidad Nacional de la Plata
  **ADP(Algoritmos datos y programas)**: 
 materia donde se enseña lo básico de la programación estructurada , en PASCAL porque es un lenguaje que facilita el aprendizaje porque es fuertemente tipado. Esto significa que:
     
-     - El código esta dividido en 'funciones o procedimientos' legibles y un programa principal. el cual se encarga de invocar a los procedimientos y 
-      funciones.
+     - El código esta dividido en 'funciones o procedimientos' legibles y un programa principal.
+        el cual se encarga de invocar a los procedimientos y funciones.
 
     - El 'tipo de dato' de todas las variables debe ser declarado previamente para que su uso quede habilitado.
 
