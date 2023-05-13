@@ -37,13 +37,22 @@ materia donde se enseña
 **Programación orientada a objetos 1**:  
 materia donde se enseña la programación orientada a objetos utilizando el lenguaje smalltak y en estos ultimos años se esta utilizando java, aplicando los conceptos básicos e importantes que son: "ENCAPSULAMIENTO , ABSTRACCION , HERENCIA , POLIMORFISMO, OBJETO, CLASE" y diseñando los objetos en diagrama de clases utilizando UML.
 
-**Seminarios de lenguajes(hay varias seminarios como los de C, python, javascript, php, Android)**:  
+**Seminarios de lenguajes(hay varios seminarios como los de C, python, javascript, php, Android)**:  
     
      - Seminario de PHP: En este seminario te enseñan  y tiene como objetivo crear una pagina web desde cero utilizando html, css, javascript, bootstrap(opcional), php, phpmyadmin(para levantar una bd y mostrar la informacion de la bd en la pagina a realizar), uso de programacion orientada a objetos, excepciones y uso de  cookies.
   
      - Seminario de Android: En este seminario se enseñan y tiene como objetivo la creación de un juego utilizando Android studio.
 
 **Ingeniería de software 1**:
+materia donde se estudian los procesos, técnicas y herramientas utilizadas en el desarrollo de software, Los temas que se pueden estudiar en esta materia son:
+
+    - Conceptos como requerimiento , stakeholders y tecnicas de elicitacion , como por ejemplo, Investigación  , muestreo de documentacion o formualarios, Observación del ambiente de Trabajo,  visitas al lugar ,                 entrevistas , cuestionarios)
+    - Procesos de desarrollo de software, como los modelos en cascada, modelo en espiral , modelo en V , modelo de prototipos.
+    - Tecnicas de comunicacion(Brainstorming, JRP)
+    - Requerimientos y análisis de requisitos de software.
+    - Tecnicas de especificacion de requerimientos DINAMICAS como tablas de decision ,  diagrama de transicion de estados , redes de petri, casos de uso , historia de usuario y diagrama de flujo.
+    - Metodologías ágiles como XP y como Scrum.
+    - Conceptos de calidad y la CMMI
 
 **Introducción a sistema operativos**:
 
