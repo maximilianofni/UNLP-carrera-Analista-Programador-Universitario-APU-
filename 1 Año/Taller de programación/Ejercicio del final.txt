@@ -1,0 +1,104 @@
+programa carrera
+procesos
+  proceso iniciarBolsa
+  comenzar
+    mientras HayFlorEnLaBolsa
+      depositarFlor
+    mientras HayPapelEnLaBolsa
+      depositarPapel
+  fin
+  proceso correr
+  variables
+    pasos :numero
+  comenzar    
+    mientras (PosCa <= 30)
+      Random(pasos,1,5) 
+      repetir pasos
+        mover
+      mientras HayFlorEnLaEsquina
+        tomarFlor
+      mientras HayPapelEnLaEsquina
+        tomarPapel
+  fin
+  proceso depositar
+  variables
+    av,ca : numero
+  comenzar
+    av := PosAv
+    ca := PosCa
+    mientras HayFlorEnLaBolsa
+      BloquearEsquina(35,50)
+      Pos(35,50)
+      depositarFlor
+      Pos(av,ca)
+      LiberarEsquina(35,50)
+    mientras HayPapelEnLaEsquina
+      BloquearEsquina(35,50)
+      Pos(35,50)
+      depositarPapel
+      Pos(av,ca)
+      LiberarEsquina(35,50)
+  fin
+areas
+  deposito: AreaC(35,50,35,50)
+  comun: AreaC(3,30,15,45)
+  zonaJefe: AreaP(1,1,1,1)
+  z1: AreaP(3,1,3,30)
+  z2: AreaP(5,1,5,30)
+  z3: AreaP(7,1,7,30)
+  z4: AreaP(9,1,9,30)
+robots
+  robot corredor
+  variables
+    id,empezarDeposito:numero
+  comenzar
+    iniciarBolsa
+    RecibirMensaje(id,jefe)
+    correr 
+    EnviarMensaje(1,jefe)
+    RecibirMensaje(empezarDeposito,jefe)
+    depositar
+    EnviarMensaje(id,jefe)
+  fin
+  robot jefe
+  variables
+    ganador,noGano,ok:numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    repetir 4
+      RecibirMensaje(ok,*)
+    EnviarMensaje(1,r1)
+    EnviarMensaje(1,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    RecibirMensaje(ganador,*)
+    repetir 3
+      RecibirMensaje(noGano,*)
+    Informar(ganador)
+  fin
+variables
+  r1,r2,r3,r4:corredor
+  jefe:jefe
+comenzar
+  AsignarArea(jefe,zonaJefe)
+  AsignarArea(r2,comun)
+  AsignarArea(r2,z2)
+  AsignarArea(r3,comun)
+  AsignarArea(r3,z3)
+  AsignarArea(r4,comun)
+  AsignarArea(r4,z4)
+  AsignarArea(r1,comun)
+  AsignarArea(r1,z1)
+  AsignarArea(r1,deposito)
+  AsignarArea(r2,deposito)
+  AsignarArea(r3,deposito)
+  AsignarArea(r4,deposito)
+  Iniciar(r1,3,1)
+  Iniciar(r2,5,1)
+  Iniciar(r3,7,1)
+  Iniciar(r4,9,1)
+  Iniciar(jefe,1,1)
+fin
