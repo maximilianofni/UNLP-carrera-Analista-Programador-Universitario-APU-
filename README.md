@@ -43,7 +43,7 @@ materia donde se enseña la programación orientada a objetos utilizando el leng
   
      - Seminario de Android: En este seminario se enseñan y tiene como objetivo la creación de un juego utilizando Android studio.
 
-**Ingeniería de software 1**:
+**Ingeniería de software I**:
 materia donde se estudian los procesos, técnicas y herramientas utilizadas en el desarrollo de software, Los temas que se pueden estudiar en esta materia son:
 
     - Conceptos como requerimiento , stakeholders y tecnicas de elicitacion , como por ejemplo, Investigación  , muestreo de documentacion o formualarios, Observación del ambiente de Trabajo,  visitas al lugar ,                 entrevistas , cuestionarios)
@@ -65,3 +65,14 @@ materia donde se estudian los procesos, técnicas y herramientas utilizadas en e
         - Entrada y salida: dispositivos de entrada y salida, controladores de dispositivos, interrupciones, DMA y acceso directo a memoria.
         - Administración de usuarios y permisos en el sistema operativo.
         - Comandos en sistemas operativos LINUX.
+
+## 3 AÑO
+
+**Ingenieria de software II**:
+
+**Programacion Orientada a objetos II**:
+
+**Programacion Concurrente**:
+
+
+
